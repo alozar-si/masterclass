@@ -1,0 +1,29 @@
+<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+  <category name="Blocks">
+    <block type="simple_analysis">
+      <field name="neve">5000</field>
+      <field name="datasource">1</field>
+    </block>
+    <block type="histogram_creator">
+      <field name="name">Mass</field>
+      <field name="nbins">200</field>
+      <field name="min">0</field>
+      <field name="max">5</field>
+      <field name="varname">GetMass</field>
+    </block>
+    <block type="particle_selector">
+      <field name="chargelist">-1</field>
+      <field name="simplepid">MUON</field>
+    </block>
+    <block type="particle_combiner">
+      <field name="simplepid">ELECTRON</field>
+      <field name="mass0">0</field>
+      <field name="mass1">5</field>
+    </block>
+    <block type="particle_combiner3">
+      <field name="simplepid">ELECTRON</field>
+      <field name="mass0">0</field>
+      <field name="mass1">5</field>
+    </block>
+  </category>
+</xml>
