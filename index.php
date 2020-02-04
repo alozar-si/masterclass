@@ -12,7 +12,16 @@
   <script src="js/belle2_gen.js"></script>  
   <script src="js/workspace.js"></script>
   <script src="js/FileSaver.min.js"></script>
+
+  <link rel="shortcut icon" href="https://root.cern/js/latest/img/RootIcon.ico"/>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
   
+  <script src="JSRootExtend.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="polFitPanel.js"></script>
+  <script src="fminsearch.js"></script>
 <style>
 table {
     border-collapse: collapse;
@@ -125,6 +134,7 @@ function startTask() {
 
 function startAction() {
    var btnstart = document.getElementById('btnstart');
+   first = 0;
    if (btnstart.value=== "Stop Analysis"){
      stopTask();
    } else {
@@ -185,30 +195,39 @@ var result = JSON.parse( e.data );
                 //var r = document.getElementById('results');
                 var r = document.getElementById('drawing');
                 if (document.getElementById(sframe) == null ){
-                  console.log('insert HTML')
-                  r.insertAdjacentHTML('beforeend', '<div id="' + sframe +'" style="width:1000px; height:600px"></div><br/>');
+                  //console.log('insert HTML for', sframe)
+                  r.insertAdjacentHTML('beforeend', '<div id="' + sframe +'" style="width:800px; height:500px"></div><br/>');//narise histogram
+                  
                   r.insertAdjacentHTML('beforeend', '<div id="fit' + sframe +'" style="display: none"></div><br/>');
-                  var fit = document.getElementById('fit'+ sframe);
-                  mform ='<form method="post" action="th1fit.php" onsubmit="return fitpanel(this);">';
-                  mform += '  Function:<input type="text"  size="20"  value="gaus"    name="fitfun" /><br/>';
-                  mform += '  Range: min=<input type="text" size="2" value="0"   name="min" />';
-                  mform += '  max=<input type="text" size="2"  value="20"   name="max" /><br/>';
-                  mform += '  Initial parameters (separated by ,)<input type="text" size="20" value=""    name="prm" /><br/>';
-                  mform += '  <input id="data'+ sframe +'" type="hidden" value="'+ result.message +'" name="data" />';
-                  mform += '  <input type="hidden" value="'+ sframe +'"    name="name" />';
-                  mform += '  <input class="mybutton" type="submit" value="  Fit  "/>';
-                  mform += '</form>';
-                  fit.insertAdjacentHTML('beforeend', '<div id="param' + sframe +'"></div><br/>');
-                  fit.insertAdjacentHTML('beforeend', mform);
+                  if(sframe=='h0'){
+                    insertHTML('h0');
+                  }else{
+                    var fit = document.getElementById('fit'+ sframe);
+                    mform ='<form method="post" action="th1fit.php" onsubmit="return fitpanel(this);">';
+                    mform += '  Function:<input type="text"  size="20"  value="gaus"    name="fitfun" /><br/>';
+                    mform += '  Range: min=<input type="text" size="2" value="0"   name="min" />';
+                    mform += '  max=<input type="text" size="2"  value="20"   name="max" /><br/>';
+                    mform += '  Initial parameters (separated by ,)<input type="text" size="20" value=""    name="prm" /><br/>';
+                    mform += '  <input id="data'+ sframe +'" type="hidden" value="'+ result.message +'" name="data" />';
+                    mform += '  <input type="hidden" value="'+ sframe +'"    name="name" />';
+                    mform += '  <input class="mybutton" type="submit" value="  Fit  "/>';
+                    mform += '</form>';
+                    fit.insertAdjacentHTML('beforeend', '<div id="param' + sframe +'"></div><br/>');
+                    fit.insertAdjacentHTML('beforeend', mform);
+
+                    document.getElementById('data'+ sframe).value=result.message;
+                  }
                   r.insertAdjacentHTML('beforeend','<input type="button" onclick="togglevisibility(\'fit'+sframe+'\');"  class="mybutton" value="Show/Hide Fit Panel" />' );
                   r.insertAdjacentHTML('beforeend','&nbsp;<input type="button" onclick="toProcess();"  class="mybutton" value="To Process" /><hr/>' );
-                  document.getElementById('data'+ sframe).value=result.message;
+                  
                   //r.insertAdjacentHTML('beforeend', JSON.stringify(result.message));
                 }
                 var frame = document.getElementById(sframe);
-        
-                JSROOT.redraw(sframe, jsonobj, "hist");
-               
+                JSROOT.redraw(sframe, jsonobj, "hist", function(){
+                  if(sframe=='h0'){initSliders(sframe);}
+                });
+                
+                
 
                 frame.scrollIntoView();
               }
