@@ -1,9 +1,9 @@
 var funList = [0, 0, 0];
-var first = 0;
+
 function initSliders(sframe){
   //console.log('CB function', sframe)
   getFunList();
-  var obj = JSROOT.GetMainPainter(sframe).draw_object;
+  var obj = JSROOT.GetMainPainter(sframe).draw_object; //get the histogram
   //console.log(obj);
   
   //Initialise all ParameterSliders
@@ -252,20 +252,20 @@ function fitMasterFun(xmin, xmax, N, parametri){
   document.getElementById("chi2Red").innerHTML = (chi2/ndf).toPrecision(4);
 
   var g = JSROOT.CreateTGraph(N, x, y);
-
-  switch (first) {
-    case 0:
-      first = 2;
-      JSROOT.draw("h0", g, "", function(){first=1});
-      break;
-    case 1:
-      JSROOT.redraw("h0", g, "");
-      break;
-
-    default:
-      console.log("Still plotting.")
-      break;
+  var isTGraphOn = JSROOT.GetMainPainter('h0').draw_object.fTGraphPlotted;
+  if (typeof isTGraphOn === "undefined") {
+    //TGraph does not exist yet
+    var a = JSROOT.GetMainPainter('h0').draw_object;
+    a.fTGraphPlotted = 0;
+    JSROOT.draw("h0", g, "", function(){
+      var obj = JSROOT.GetMainPainter('h0').draw_object;
+      obj.fTGraphPlotted = 1;
+      });
+  } else {
+    //replot only if TGraph is already plotted, else: it is plotting
+    if(isTGraphOn==1){JSROOT.redraw("h0", g, "");}
   }
+
 }
 
 function getNparameters(){
@@ -383,7 +383,6 @@ function expo(x, p){
 
 function divClean(divid){
   JSROOT.cleanup(divid);
-  first = 0;
 }
 
 function getFunList(){
