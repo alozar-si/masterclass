@@ -41,7 +41,7 @@ function StoreAndDrawFitFunction(TH1, TF1, range, delOldFunction, divid){
       } 
     }
 
-    fnew1 = JSROOT.Create("TF1");
+    var fnew1 = JSROOT.Create("TF1");
     fnew1 = TF1;
     
     funcList.Add(fnew1);

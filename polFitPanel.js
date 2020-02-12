@@ -183,7 +183,7 @@ function getManualParameters(){
 }
 
 function setManualParameters(p, mask){
-  //sets the value of parameters
+  //sets the value of parameters and correct max or min value if p greater or smaller
   
   var paramNames = ["Amplitude", "Mu", "Sigma", "A0", "A1", "A2", "A3", "A4", "AmpExp", "K"];
   //console.log(mask);
