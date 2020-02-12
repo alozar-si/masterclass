@@ -97,14 +97,14 @@ function initSliders(sframe){
   });
 }
 
-function autoFit(){
+function autoFit(sframe){
   //works only if histogram is on canvas
   //document.getElementById('status').style.display='block';
   var xmin = parseFloat(document.getElementById("minRange").value);
   var xmax = parseFloat(document.getElementById("maxRange").value);
   
   var initParam = getManualParameters();//unused
-  var data = getDataFromHisto("h0");
+  var data = getDataFromHisto(sframe);
   var N = data.length;
   
   var x = [], y = []; //data points
@@ -120,16 +120,16 @@ function autoFit(){
   var maskParam = getParametersMask(); //use only these parameters, all others are fixed or un used
   var maskParamRange = getParamRangeMask();
   //console.log(maskParamRange);
-  var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange, sframe:'h0'});
+  var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange, sframe:sframe});
   var Parm0 = result[0];
   var chi2 = result[1];
   setManualParameters(Parm0, maskParam); // set parameters' values
-  var obj = JSROOT.GetMainPainter("h0").draw_object;
+  var obj = JSROOT.GetMainPainter(sframe).draw_object;
   
-  funkcija = CreateTF1Fit(Parm0, "h0");
+  funkcija = CreateTF1Fit(Parm0, sframe);
   funkcija.fChisquare = chi2;
   funkcija.fNDF = NdataPoints-getNparameters(); //calculate ndf      
-  StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, "h0");
+  StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, sframe);
   //calculate(Parm0);//call to draw function
 }
 
@@ -535,7 +535,7 @@ function generateHTMLcode(sframe){
   //console.log('generate html')
   //mform = '<div id="fith0">'' + sframe + '
   mform = '<button type="button" onclick="calculate()">Draw Function</button>';        
-  mform += '<button type="button" onclick="autoFit()">Click to fit.</button>'; 
+  mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit.</button>'; 
   mform += '        <div id="fitPanel">'
   mform += '          Function:'
   mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="genFunList(' + "'" + sframe + "'"+ ')">'
