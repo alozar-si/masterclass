@@ -386,6 +386,12 @@ function divClean(divid){
   JSROOT.cleanup(divid);
 }
 
+function getFunList(sframe){
+  //returns funList from funMatrix
+  var k = parseInt(sframe.slice(1)); //get histogram number 0, 1, 2, ...
+  return funMatrix[k]
+}
+
 function genFunList(sframe){
   //sframe - string name: h0, h1, ...
   //actualy does not show, but only creates funList, funList should go in TH1.funList?
