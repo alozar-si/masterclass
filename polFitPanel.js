@@ -47,12 +47,12 @@ function initSliders(sframe){
         range: false, min: min, max: max, value:value, step: 0.001,    
         slide: function( event, ui ) {
           $( ID.slice(0,n-3) ).val(ui.value);
-          calculate();
+          calculate(sframe);
         },
         change: function( event, ui ){
           $( ID.slice(0,n-3) ).val(ui.value);
           console.log("This is a change", ID.slice(0,n-3), ID, this.id);
-          calculate();
+          calculate(sframe);
         }
       });
       setDefaultParameters(paramName);
@@ -67,13 +67,13 @@ function initSliders(sframe){
       step: (obj.fXaxis.fXmax-obj.fXaxis.fXmin)/100,
       values: [ obj.fXaxis.fXmin, obj.fXaxis.fXmax ],
       slide: function( event, ui ) {
-        document.getElementById("minRange").value = ui.values[0];
-        document.getElementById("maxRange").value = ui.values[1];
-        calculate();
+        document.getElementById("minRange"+sframe).value = ui.values[0];
+        document.getElementById("maxRange"+sframe).value = ui.values[1];
+        calculate(sframe);
       }
     });
-    $("#minRange").val($( "#slider-range" ).slider( "values", 0));
-    $("#maxRange").val($( "#slider-range" ).slider( "values", 1));
+    $("#minRange"+sframe).val($( "#slider-range" ).slider( "values", 0));
+    $("#maxRange"+sframe).val($( "#slider-range" ).slider( "values", 1));
   });
 
   //Script for choosing polynomial order
@@ -89,7 +89,7 @@ function initSliders(sframe){
         //document.getElementById("polOrderDisplay").value = ui.value;
         $( "#polOrderDisplay" ).val(ui.value);
         updatePolParamList(ui.value);
-        calculate();
+        calculate(sframe);
       }
     });
     $( "#polOrderDisplay" ).val( $("#slider-polOrder").slider("value") );
@@ -100,8 +100,8 @@ function initSliders(sframe){
 function autoFit(sframe){
   //works only if histogram is on canvas
   //document.getElementById('status').style.display='block';
-  var xmin = parseFloat(document.getElementById("minRange").value);
-  var xmax = parseFloat(document.getElementById("maxRange").value);
+  var xmin = parseFloat(document.getElementById("minRange"+sframe).value);
+  var xmax = parseFloat(document.getElementById("maxRange"+sframe).value);
   
   var initParam = getManualParameters();//unused
   var data = getDataFromHisto(sframe);
@@ -155,8 +155,8 @@ function calculate(h){
   var N = 501; // number of points for function ploting
   //var funfit = document.getElementById("fitfun").value;
 
-  var xmin = parseFloat(document.getElementById("minRange").value);
-  var xmax = parseFloat(document.getElementById("maxRange").value);
+  var xmin = parseFloat(document.getElementById("minRange"+h).value);
+  var xmax = parseFloat(document.getElementById("maxRange"+h).value);
   
   var parameters = [];
   parameters = getManualParameters();
@@ -534,7 +534,7 @@ function insertHTML(sframe, callback){
 function generateHTMLcode(sframe){
   //console.log('generate html')
   //mform = '<div id="fith0">'' + sframe + '
-  mform = '<button type="button" onclick="calculate()">Draw Function</button>';        
+  mform = '<button type="button" onclick="calculate('+ "'" + sframe + "'"+')">Draw Function</button>';        
   mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit.</button>'; 
   mform += '        <div id="fitPanel">'
   mform += '          Function:'
@@ -705,8 +705,8 @@ function generateHTMLcode(sframe){
   mform += '          </div>'
   mform += '        </div>'
   mform += '<div class="rangeSettings">';
-  mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange" disabled=true>';
-  mform += 'max = <input type="text" size="2" value="5" name="max" id="maxRange" disabled=true>';
+  mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange'+sframe+'" disabled=true>';
+  mform += 'max = <input type="text" size="2" value="5" name="max" id="maxRange'+sframe+'" disabled=true>';
   mform += '<div style="display: inline-block;">';
   mform += '&nbsp; &chi;²/ndf = <output id="chi2Output"></output> / <output id="ndfOutput"></output> = <output id="chi2Red"></output> <br>';
   mform += '</div>';
