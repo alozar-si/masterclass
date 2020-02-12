@@ -120,13 +120,13 @@ function autoFit(){
   var maskParam = getParametersMask(); //use only these parameters, all others are fixed or un used
   var maskParamRange = getParamRangeMask();
   //console.log(maskParamRange);
-  var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange});
+  var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange, sframe:'h0'});
   var Parm0 = result[0];
   var chi2 = result[1];
   setManualParameters(Parm0, maskParam); // set parameters' values
   var obj = JSROOT.GetMainPainter("h0").draw_object;
   
-  funkcija = CreateTF1Fit(Parm0);
+  funkcija = CreateTF1Fit(Parm0, "h0");
   funkcija.fChisquare = chi2;
   funkcija.fNDF = NdataPoints-getNparameters(); //calculate ndf      
   StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, "h0");
@@ -161,7 +161,7 @@ function calculate(h){
   var parameters = [];
   parameters = getManualParameters();
   
-  fitMasterFun(xmin, xmax, N, parameters);
+  fitMasterFun(xmin, xmax, N, parameters, 'h0');
 }
 
 function getManualParameters(){
@@ -214,13 +214,13 @@ function setManualParameters(p, mask){
   }
 }
 
-function fitMasterFun(xmin, xmax, N, parametri){
+function fitMasterFun(xmin, xmax, N, parametri, sframe){
   var x = [];
   var y = [];
 
   for(var i = 0; i<N; i++){
     x.push((xmax-xmin)*i/N+xmin);
-    y.push(calcMasterFun(x[i], parametri));
+    y.push(calcMasterFun(x[i], parametri, sframe));
   }
   
   var data = getDataFromHisto("h0");
@@ -230,7 +230,7 @@ function fitMasterFun(xmin, xmax, N, parametri){
   for(var i=0; i<data.length; ++i){
     //calculate sum of residuals
     if( (data[i][0] > xmin) && (data[i][0] < xmax) && (data[i][1] != 0)){
-      var yfit = calcMasterFun(data[i][0], parametri);
+      var yfit = calcMasterFun(data[i][0], parametri, sframe);
       var ydata = data[i][1];
       sum += Math.pow(ydata-yfit, 2) / ydata;
       NdataPoints++;
@@ -341,19 +341,19 @@ function getDataFromHisto(divid){
   return data
 }
 
-function calcMasterFun(x, parametri){
+function calcMasterFun(x, parametri, sframe){
   //calculates function gaus + pol + exp
   parametriGaus = [parametri[0], parametri[1], parametri[2]];
   parametriPol = [parametri[3], parametri[4], parametri[5], parametri[6], parametri[7]];
   parametriExp = [parametri[8], parametri[9]];
   //console.log(parametriExp);
-  var funList = getFunList('h0');
+  var funList = getFunList(sframe);
   return funList[0]*gaus(x, parametriGaus) + funList[1]*pol(x, parametriPol) + funList[2]*expo(x, parametriExp);
 }
 
-function calcMasterFun2(x, parametri){
+function calcMasterFun2(x, parametri, sframe){
   //calculates function gaus + pol + exp, x must be vector
-  return x.map(function(xi){return (calcMasterFun(xi, parametri))});
+  return x.map(function(xi){return (calcMasterFun(xi, parametri, sframe))});
 }
 
 function pol(x, p){

@@ -67,13 +67,14 @@ fminsearch=function(fun,Parm0,x,y,Opt){// fun = function(x,Parm)
 	} //SSD
 	if(!Opt.mask){Opt.mask = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}; //use all parameters
 	if(!Opt.maskBond){Opt.maskBond = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[]]};//first element is mask, second is 
+	if(!Opt.sframe){Opt.sframe = 'h0'};
 	var cloneVector=function(V){return V.map(function(v){return v})};
 
 	var P1, ya,y0,yb,fP0,fP1;
 	var P0 = cloneVector(Parm0);//, P1 = cloneVector(Parm0);
 	var n = P0.length;
 	var step = Opt.step;
-	var funParm=function(P){return Opt.objFun(y,fun(x,P))}//function (of Parameters) to minimize
+	var funParm=function(P){return Opt.objFun(y,fun(x,P, Opt.sframe))}//function (of Parameters) to minimize
 	//console.log('before:', P0);
 	P0 = checkIfInRange(P0, Opt.maskBond);
 	//console.log('after:', P0)
@@ -101,7 +102,7 @@ fminsearch=function(fun,Parm0,x,y,Opt){// fun = function(x,Parm)
 		//console.log(funParm(P0), P0);
 	}
 	//console.log(funParm(P0), P0, chisq(y, fun(x,P0)));
-	return [P0, chisq(y, fun(x,P0))];
+	return [P0, chisq(y, fun(x,P0, Opt.sframe))];
 };
 
 function checkIfInRange(P0, maskBond){

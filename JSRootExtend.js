@@ -102,7 +102,7 @@ function GetParameters(TF1){
     return parameters;      
 }
 
-function CreateTF1Fit(param){
+function CreateTF1Fit(param, sframe){
   //This fuction can create gaus, pol0-5 and exp functions, or their combinations.
   var func = JSROOT.Create("TF1");
   var formula = JSROOT.Create("TFormula");
@@ -111,7 +111,7 @@ function CreateTF1Fit(param){
   formula.fFormula = "";
   formula.fParams = [];
   formula.fNparam = Npar;
-
+  var funList = getFunList(sframe);
   if(funList[0]){
     //Gaus function
     var gausParameters = ["Constant", "Mean", "Sigma"];
