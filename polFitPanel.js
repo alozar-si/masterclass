@@ -1,4 +1,3 @@
-var funList = [0, 0, 0];
 var funMatrix = [[0, 0, 0],
                 [0, 0, 0],
                 [0, 0, 0],
@@ -271,6 +270,7 @@ function fitMasterFun(xmin, xmax, N, parametri){
 
 function getNparameters(){
   var x = 0;
+  var funList = getFunList('h0');
   if(funList[0]==1){
     //Gaus has 3 parameters
     x += 3;
@@ -292,7 +292,7 @@ function getParametersMask(){
   var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K'];
   var i;
-
+  var funList = getFunList('h0');
   if(funList[0]==1){
     //Gaus has 3 parameters
     for(i = 0; i < 3; i++){
@@ -347,6 +347,7 @@ function calcMasterFun(x, parametri){
   parametriPol = [parametri[3], parametri[4], parametri[5], parametri[6], parametri[7]];
   parametriExp = [parametri[8], parametri[9]];
   //console.log(parametriExp);
+  var funList = getFunList('h0');
   return funList[0]*gaus(x, parametriGaus) + funList[1]*pol(x, parametriPol) + funList[2]*expo(x, parametriExp);
 }
 
@@ -398,7 +399,7 @@ function genFunList(sframe){
   var funfit = document.getElementById("selectFitFun"+sframe).value;
   var funfit2 = funfit.split(/[ +]/);
   var implementedFun = ["gaus", "pol", "expo"] //
-  var funList = [0, 0, 0];
+  var funList = getFunList(sframe);
   var k = parseInt(sframe.slice(1)); //get histogram number 0, 1, 2, ...
 
   for (var i = 0; i < implementedFun.length; i++) {
