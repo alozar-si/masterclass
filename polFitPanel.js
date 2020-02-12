@@ -7,7 +7,7 @@ var funMatrix = [[0, 0, 0],
 
 function initSliders(sframe){
   //console.log('CB function', sframe)
-  getFunList(sframe);
+  genFunList(sframe);
   var obj = JSROOT.GetMainPainter(sframe).draw_object; //get the histogram
   //console.log(obj);
   
@@ -386,7 +386,7 @@ function divClean(divid){
   JSROOT.cleanup(divid);
 }
 
-function getFunList(sframe){
+function genFunList(sframe){
   //sframe - string name: h0, h1, ...
   //actualy does not show, but only creates funList, funList should go in TH1.funList?
   var funfit = document.getElementById("selectFitFun"+sframe).value;
@@ -531,7 +531,7 @@ function generateHTMLcode(sframe){
   mform += '<button type="button" onclick="autoFit()">Click to fit.</button>'; 
   mform += '        <div id="fitPanel">'
   mform += '          Function:'
-  mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="getFunList(' + "'" + sframe + "'"+ ')">'
+  mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="genFunList(' + "'" + sframe + "'"+ ')">'
   mform += '            <option value="gaus">Gaus</option>'
   mform += '            <option value="pol">Poly</option>'
   mform += '            <option value="expo">Expo</option>'
@@ -542,7 +542,7 @@ function generateHTMLcode(sframe){
   mform += '          </select>'
   mform += '          <!--'
   mform += '            This was replaced b select:option'
-  mform += '            <input type="text" name="fitfun" id="fitfun" value="pol" onblur="getFunList()"><br>'
+  mform += '            <input type="text" name="fitfun" id="fitfun" value="pol" onblur="genFunList()"><br>'
   mform += '          -->'
   mform += '          <div id="polFitPanel' + sframe + '">'
   mform += '            Polynomial order: <input type="text" name="polOrder" id="polOrderDisplay" size="1" disabled=true>'
