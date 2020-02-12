@@ -47,7 +47,7 @@ function initSliders(sframe){
         },
         change: function( event, ui ){
           $( ID.slice(0,n-3) ).val(ui.value);
-          //console.log("This is a change");
+          console.log("This is a change", ID.slice(0,n-3), ID, this.id);
           calculate();
         }
       });
@@ -99,7 +99,7 @@ function autoFit(){
   var xmin = parseFloat(document.getElementById("minRange").value);
   var xmax = parseFloat(document.getElementById("maxRange").value);
   
-  var initParam = getManualParameters();
+  var initParam = getManualParameters();//unused
   var data = getDataFromHisto("h0");
   var N = data.length;
   
@@ -146,7 +146,7 @@ function getParamRangeMask(){
   return [x, ranges]
 }
 
-function calculate(p){
+function calculate(h){
   //var x = parseFloat(document.getElementById("xValue").value);
   var N = 501; // number of points for function ploting
   //var funfit = document.getElementById("fitfun").value;
@@ -154,12 +154,8 @@ function calculate(p){
   var xmin = parseFloat(document.getElementById("minRange").value);
   var xmax = parseFloat(document.getElementById("maxRange").value);
   
-  if(!p){
-    var parameters = [];
-    parameters = getManualParameters();
-  }else{
-    var parameters = p;
-  }
+  var parameters = [];
+  parameters = getManualParameters();
   
   fitMasterFun(xmin, xmax, N, parameters);
 }
@@ -447,7 +443,7 @@ function disableInput(state, objId){
   //Change disabled state of parameters inputs
   disableParamSlider(state, objId);
   //console.log(state, objId, name);
-  var obj = document.getElementById(objId).getElementsByTagName("input");//find inputs
+  var obj = document.getElementById(objId).getElementsByTagName("input");//find inputs inside of row
   for (var i = 0; i < obj.length; i++) {
     obj[i].disabled = state; //set state of inputs
   }
@@ -553,7 +549,7 @@ function generateHTMLcode(sframe){
   mform += '                  <td>Step</td>'
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA0">'
-  mform += '                  <td><li id="listA0">A0:</td>'
+  mform += '                  <td><li>A0:</td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA0"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA0"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA0" name="A0" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
@@ -564,7 +560,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA1">'
   mform += '                  <div id="rowA1">'
-  mform += '                    <td><li id="listA1">A1:</td>'
+  mform += '                    <td><li>A1:</td>'
   mform += '                    <td><input type="checkbox" class="inputParamBox" id="fixA1"></td>'
   mform += '                    <td><input type="checkbox" class="inputParamBox" id="bondA1"></td>'
   mform += '                    <td><input type="text" class="inputParam" id="ParamA1" name="A1" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
@@ -575,7 +571,7 @@ function generateHTMLcode(sframe){
   mform += '                  </div>'
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA2">'
-  mform += '                  <td><li id="listA2">A2:</td>'
+  mform += '                  <td><li>A2:</td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA2"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA2"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA2" name="A2" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
@@ -585,7 +581,7 @@ function generateHTMLcode(sframe){
   mform += '                  <td><input type="text" class="inputParam" id="ParamA2step" name="A2" value="0.1" onkeyup="updateSetSlider(this)"></td>'
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA3">'
-  mform += '                  <td><li id="listA3">A3:</td>'
+  mform += '                  <td><li>A3:</td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA3"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA3"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA3"  name="A3" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
@@ -595,7 +591,7 @@ function generateHTMLcode(sframe){
   mform += '                  <td><input type="text" class="inputParam" id="ParamA3step" name="A3" value="0.1" onkeyup="updateSetSlider(this)"></td>'
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA4">'
-  mform += '                  <td><li id="listA4">A4:</td>'
+  mform += '                  <td><li>A4:</td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA4"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA4"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA4" name="A4" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
