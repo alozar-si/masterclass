@@ -1,8 +1,13 @@
 var funList = [0, 0, 0];
+var funMatrix = [[0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]]
 
 function initSliders(sframe){
   //console.log('CB function', sframe)
-  getFunList();
+  getFunList(sframe);
   var obj = JSROOT.GetMainPainter(sframe).draw_object; //get the histogram
   //console.log(obj);
   
@@ -381,23 +386,29 @@ function divClean(divid){
   JSROOT.cleanup(divid);
 }
 
-function getFunList(){
+function getFunList(sframe){
+  //sframe - string name: h0, h1, ...
   //actualy does not show, but only creates funList, funList should go in TH1.funList?
-  var funfit = document.getElementById("selectFitFun").value;
+  var funfit = document.getElementById("selectFitFun"+sframe).value;
   var funfit2 = funfit.split(/[ +]/);
   var implementedFun = ["gaus", "pol", "expo"] //
+  var funList = [0, 0, 0];
+  var k = parseInt(sframe.slice(1)); //get histogram number 0, 1, 2, ...
 
   for (var i = 0; i < implementedFun.length; i++) {
     if (funfit2.includes(implementedFun[i])) {
       funList[i] = 1;
-      document.getElementById(implementedFun[i]+"FitPanel").style.display = "block";
+      funMatrix[k][i] = 1;
+      document.getElementById(implementedFun[i]+"FitPanel"+sframe).style.display = "block";
     } else {
       funList[i] = 0;
-      document.getElementById(implementedFun[i]+"FitPanel").style.display = "none";
+      funMatrix[k][i] = 0;
+      document.getElementById(implementedFun[i]+"FitPanel"+sframe).style.display = "none";
     }
   }
- 
-  if((funList[0]+funList[1]+funList[2]) == 0){ alert("'gaus' or 'pol' or 'expo' functions are available.") } //
+  console.log('store funList in this row in matrix ', k);
+  console.log('This is funMatrix', funMatrix);
+  if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
 }
 
 function updatePolParamList(n){
@@ -515,12 +526,12 @@ function insertHTML(sframe, callback){
 
 function generateHTMLcode(sframe){
   //console.log('generate html')
-  //mform = '<div id="fith0">'
+  //mform = '<div id="fith0">'' + sframe + '
   mform = '<button type="button" onclick="calculate()">Draw Function</button>';        
   mform += '<button type="button" onclick="autoFit()">Click to fit.</button>'; 
   mform += '        <div id="fitPanel">'
   mform += '          Function:'
-  mform += '          <select  name="fitfun" id="selectFitFun" onclick="getFunList()">'
+  mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="getFunList(' + "'" + sframe + "'"+ ')">'
   mform += '            <option value="gaus">Gaus</option>'
   mform += '            <option value="pol">Poly</option>'
   mform += '            <option value="expo">Expo</option>'
@@ -533,7 +544,7 @@ function generateHTMLcode(sframe){
   mform += '            This was replaced b select:option'
   mform += '            <input type="text" name="fitfun" id="fitfun" value="pol" onblur="getFunList()"><br>'
   mform += '          -->'
-  mform += '          <div id="polFitPanel">'
+  mform += '          <div id="polFitPanel' + sframe + '">'
   mform += '            Polynomial order: <input type="text" name="polOrder" id="polOrderDisplay" size="1" disabled=true>'
   mform += '            <div style="width: 100px;display: inline-block;" id="slider-polOrder"></div>'
   mform += '            <table class="inputParametersTable">'
@@ -603,7 +614,7 @@ function generateHTMLcode(sframe){
   mform += '              </tbody>'
   mform += '            </table>'
   mform += '          </div>'
-  mform += '          <div id="gausFitPanel">'
+  mform += '          <div id="gausFitPanel' + sframe + '">'
   mform += '            <table class="inputParametersTable" id="inputParamTableGaus">'
   mform += '              <tbody>'
   mform += '                <tr class="description">'
@@ -649,7 +660,7 @@ function generateHTMLcode(sframe){
   mform += '              </tbody>'
   mform += '            </table>'
   mform += '          </div>'
-  mform += '          <div id="expoFitPanel">'
+  mform += '          <div id="expoFitPanel' + sframe + '">'
   mform += '            <table class="inputParametersTable" id="inputParamTableExpo">'
   mform += '              <tbody>'
   mform += '                <tr class="description">'
