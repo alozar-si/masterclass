@@ -60,7 +60,7 @@ function initSliders(sframe){
   })
   //Script for initialising range sliders
   $( function() {
-    $( ".slider-range" ).slider({
+    $( "#slider-range"+sframe ).slider({
       range: true,
       min: obj.fXaxis.fXmin,
       max: obj.fXaxis.fXmax,
@@ -72,8 +72,8 @@ function initSliders(sframe){
         calculate(sframe);
       }
     });
-    $("#minRange"+sframe).val($( "#slider-range" ).slider( "values", 0));
-    $("#maxRange"+sframe).val($( "#slider-range" ).slider( "values", 1));
+    $("#minRange"+sframe).val($( "#slider-range"+sframe ).slider( "values", 0));
+    $("#maxRange"+sframe).val($( "#slider-range"+sframe ).slider( "values", 1));
   });
 
   //Script for choosing polynomial order
@@ -713,7 +713,7 @@ function generateHTMLcode(sframe){
   mform += '</div>';
   mform += '<div class="slidecontainer" style="width:600px">';
   //mform += '<div class="slider-range" id="slider-range'+sframe+'"></div>';
-  mform += '<div class="slider-range" id="slider-range"></div>';
+  mform += '<div class="slider-range" id="slider-range'+ sframe +'"></div>';
   mform += '</div>';
   mform += '      </div>'
 
