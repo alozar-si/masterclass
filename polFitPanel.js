@@ -103,7 +103,7 @@ function autoFit(sframe){
   var xmin = parseFloat(document.getElementById("minRange"+sframe).value);
   var xmax = parseFloat(document.getElementById("maxRange"+sframe).value);
   
-  var initParam = getManualParameters();//unused
+  //var initParam = getManualParameters();//unused
   var data = getDataFromHisto(sframe);
   var N = data.length;
   
@@ -116,24 +116,24 @@ function autoFit(sframe){
       if(y[i]>0){NdataPoints++;}
     }
   }
-  var p0 = getManualParameters();
-  var maskParam = getParametersMask(); //use only these parameters, all others are fixed or un used
-  var maskParamRange = getParamRangeMask();
+  var p0 = getManualParameters(sframe);
+  var maskParam = getParametersMask(sframe); //use only these parameters, all others are fixed or un used
+  var maskParamRange = getParamRangeMask(sframe);
   //console.log(maskParamRange);
   var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange, sframe:sframe});
   var Parm0 = result[0];
   var chi2 = result[1];
-  setManualParameters(Parm0, maskParam); // set parameters' values
+  setManualParameters(Parm0, maskParam, sframe); // set parameters' values
   var obj = JSROOT.GetMainPainter(sframe).draw_object;
   
   funkcija = CreateTF1Fit(Parm0, sframe);
   funkcija.fChisquare = chi2;
-  funkcija.fNDF = NdataPoints-getNparameters(); //calculate ndf      
+  funkcija.fNDF = NdataPoints-getNparameters(sframe); //calculate ndf      
   StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, sframe);
   //calculate(Parm0);//call to draw function
 }
 
-function getParamRangeMask(){
+function getParamRangeMask(sframe){
   //return mask to bond parameters and range
   var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K'];
   var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -159,12 +159,12 @@ function calculate(h){
   var xmax = parseFloat(document.getElementById("maxRange"+h).value);
   
   var parameters = [];
-  parameters = getManualParameters();
+  parameters = getManualParameters(h);
   
-  fitMasterFun(xmin, xmax, N, parameters, 'h0');
+  fitMasterFun(xmin, xmax, N, parameters, h);
 }
 
-function getManualParameters(){
+function getManualParameters(sframe){
   var parametri = [];
   var mu = parseFloat(document.getElementById("ParamMu").value);
   var sigma = parseFloat(document.getElementById("ParamSigma").value);
@@ -186,7 +186,7 @@ function getManualParameters(){
   return parametri
 }
 
-function setManualParameters(p, mask){
+function setManualParameters(p, mask, sframe){
   //sets the value of parameters and correct max or min value if p greater or smaller
   
   var paramNames = ["Amplitude", "Mu", "Sigma", "A0", "A1", "A2", "A3", "A4", "AmpExp", "K"];
@@ -223,7 +223,7 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
     y.push(calcMasterFun(x[i], parametri, sframe));
   }
   
-  var data = getDataFromHisto("h0");
+  var data = getDataFromHisto(sframe);
   var sum = 0;
   var NdataPoints = 0;
   
@@ -245,32 +245,32 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
   
   //calculate ndf
   var ndf = NdataPoints;
-  var Nparameters = getNparameters();
+  var Nparameters = getNparameters(sframe);
   ndf -= Nparameters;
 
   document.getElementById("ndfOutput").innerHTML = ndf;
   document.getElementById("chi2Red").innerHTML = (chi2/ndf).toPrecision(4);
 
   var g = JSROOT.CreateTGraph(N, x, y);
-  var isTGraphOn = JSROOT.GetMainPainter('h0').draw_object.fTGraphPlotted;
+  var isTGraphOn = JSROOT.GetMainPainter(sframe).draw_object.fTGraphPlotted;
   if (typeof isTGraphOn === "undefined") {
     //TGraph does not exist yet
-    var a = JSROOT.GetMainPainter('h0').draw_object;
+    var a = JSROOT.GetMainPainter(sframe).draw_object;
     a.fTGraphPlotted = 0;
     JSROOT.draw("h0", g, "", function(){
-      var obj = JSROOT.GetMainPainter('h0').draw_object;
+      var obj = JSROOT.GetMainPainter(sframe).draw_object;
       obj.fTGraphPlotted = 1;
       });
   } else {
     //replot only if TGraph is already plotted, else: it is plotting
-    if(isTGraphOn==1){JSROOT.redraw("h0", g, "");}
+    if(isTGraphOn==1){JSROOT.redraw(sframe, g, "");}
   }
 
 }
 
-function getNparameters(){
+function getNparameters(sframe){
   var x = 0;
-  var funList = getFunList('h0');
+  var funList = getFunList(sframe);
   if(funList[0]==1){
     //Gaus has 3 parameters
     x += 3;
@@ -288,11 +288,11 @@ function getNparameters(){
   return x
 }
 
-function getParametersMask(){
+function getParametersMask(sframe){
   var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K'];
   var i;
-  var funList = getFunList('h0');
+  var funList = getFunList(sframe);
   if(funList[0]==1){
     //Gaus has 3 parameters
     for(i = 0; i < 3; i++){
