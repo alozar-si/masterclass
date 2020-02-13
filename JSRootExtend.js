@@ -130,7 +130,7 @@ function CreateTF1Fit(param, sframe){
   
   if(funList[1]){
     //pol function
-    var n = parseInt(document.getElementById("polOrderDisplay").value);
+    var n = parseInt(document.getElementById("polOrderDisplay"+sframe).value);
     
     for(var i=0; i<=n; ++i){
       if((i>0) || (Npar > 0)){

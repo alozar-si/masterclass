@@ -87,12 +87,12 @@ function initSliders(sframe){
       slide: function( event, ui ) {
         //$( "#amount" ).val( "from " + ui.values[ 0 ] + " to " + ui.values[ 1 ] );
         //document.getElementById("polOrderDisplay").value = ui.value;
-        $( "#polOrderDisplay" ).val(ui.value);
+        $( "#polOrderDisplay" + sframe ).val(ui.value);
         updatePolParamList(ui.value);
         calculate(sframe);
       }
     });
-    $( "#polOrderDisplay" ).val( $("#slider-polOrder").slider("value") );
+    $( "#polOrderDisplay" + sframe ).val( $("#slider-polOrder").slider("value") );
     updatePolParamList($("#slider-polOrder").slider("value"));
   });
 }
@@ -171,7 +171,7 @@ function getManualParameters(sframe){
   var amplitude = parseFloat(document.getElementById("ParamAmplitude").value);
   parametri = [amplitude, mu, sigma];
 
-  var n = document.getElementById("polOrderDisplay").value;
+  var n = document.getElementById("polOrderDisplay" + sframe).value;
   for(var i=0; i<5; ++i){
     if(i<=n){
       parametri.push(parseFloat(document.getElementById("ParamA"+i).value));
@@ -257,7 +257,7 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
     //TGraph does not exist yet
     var a = JSROOT.GetMainPainter(sframe).draw_object;
     a.fTGraphPlotted = 0;
-    JSROOT.draw("h0", g, "", function(){
+    JSROOT.draw(sframe, g, "", function(){
       var obj = JSROOT.GetMainPainter(sframe).draw_object;
       obj.fTGraphPlotted = 1;
       });
@@ -278,7 +278,7 @@ function getNparameters(sframe){
 
   if(funList[1]){
     //Substract (polynomial order + 1)
-    x += parseInt(document.getElementById("polOrderDisplay").value)+1;
+    x += parseInt(document.getElementById("polOrderDisplay" + sframe).value)+1;
   }
 
   if(funList[2]){
@@ -302,7 +302,7 @@ function getParametersMask(sframe){
   i = 3;
   if(funList[1]){
     //Substract (polynomial order + 1)
-    var order = parseInt(document.getElementById("polOrderDisplay").value);
+    var order = parseInt(document.getElementById("polOrderDisplay" + sframe).value);
     for(var j=0; j < order+1; j++){
       x[i] = 1;
       i++;
@@ -552,7 +552,7 @@ function generateHTMLcode(sframe){
   mform += '            <input type="text" name="fitfun" id="fitfun" value="pol" onblur="genFunList()"><br>'
   mform += '          -->'
   mform += '          <div id="polFitPanel' + sframe + '">'
-  mform += '            Polynomial order: <input type="text" name="polOrder" id="polOrderDisplay" size="1" disabled=true>'
+  mform += '            Polynomial order: <input type="text" name="polOrder" id="polOrderDisplay' + sframe + '" size="1" disabled=true>'
   mform += '            <div style="width: 100px;display: inline-block;" id="slider-polOrder"></div>'
   mform += '            <table class="inputParametersTable">'
   mform += '              <tbody>'
