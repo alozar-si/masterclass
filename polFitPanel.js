@@ -241,15 +241,15 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
   
   //console.log(chi2);
   //display chi^2
-  document.getElementById("chi2Output").innerHTML = chi2;
+  document.getElementById("chi2Output"+sframe).innerHTML = chi2;
   
   //calculate ndf
   var ndf = NdataPoints;
   var Nparameters = getNparameters(sframe);
   ndf -= Nparameters;
 
-  document.getElementById("ndfOutput").innerHTML = ndf;
-  document.getElementById("chi2Red").innerHTML = (chi2/ndf).toPrecision(4);
+  document.getElementById("ndfOutput"+sframe).innerHTML = ndf;
+  document.getElementById("chi2Red"+sframe).innerHTML = (chi2/ndf).toPrecision(4);
 
   var g = JSROOT.CreateTGraph(N, x, y);
   var isTGraphOn = JSROOT.GetMainPainter(sframe).draw_object.fTGraphPlotted;
@@ -709,7 +709,7 @@ function generateHTMLcode(sframe){
   mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange'+sframe+'" disabled=true>';
   mform += 'max = <input type="text" size="2" value="5" name="max" id="maxRange'+sframe+'" disabled=true>';
   mform += '<div style="display: inline-block;">';
-  mform += '&nbsp; &chi;²/ndf = <output id="chi2Output"></output> / <output id="ndfOutput"></output> = <output id="chi2Red"></output> <br>';
+  mform += '&nbsp; &chi;²/ndf = <output id="chi2Output'+ sframe +'"></output> / <output id="ndfOutput'+ sframe +'"></output> = <output id="chi2Red'+ sframe +'"></output> <br>';
   mform += '</div>';
   mform += '<div class="slidecontainer" style="width:600px">';
   //mform += '<div class="slider-range" id="slider-range'+sframe+'"></div>';
