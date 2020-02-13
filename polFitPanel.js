@@ -113,7 +113,7 @@ function autoFit(sframe){
     if( (data[i][0] > xmin) && (data[i][0] < xmax)){
       x.push(data[i][0]);
       y.push(data[i][1]);
-      if(y[i]>0){NdataPoints++;}
+      if(data[i][1]>0){NdataPoints++;}
     }
   }
   var p0 = getManualParameters(sframe);
@@ -128,7 +128,7 @@ function autoFit(sframe){
   
   funkcija = CreateTF1Fit(Parm0, sframe);
   funkcija.fChisquare = chi2;
-  funkcija.fNDF = NdataPoints-getNparameters(sframe); //calculate ndf      
+  funkcija.fNDF = NdataPoints-getNparameters(sframe); //calculate ndf
   StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, sframe);
   //calculate(Parm0);//call to draw function
 }
