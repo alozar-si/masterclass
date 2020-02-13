@@ -316,7 +316,7 @@ function getParametersMask(sframe){
   }
   for(var i=0; i<varList.length; i++){
     //find fixed values and mask them
-    if(document.getElementById('fix'+varList[i]).checked){
+    if(document.getElementById('fix'+varList[i]+sframe).checked){
       x[i]=0;
     }
   }
@@ -568,7 +568,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA0">'
   mform += '                  <td><li>A0:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA0"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA0'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA0"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA0" name="A0" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA0min" name="A0" onkeyup="updateSetSlider(this)"></td>'
@@ -579,7 +579,7 @@ function generateHTMLcode(sframe){
   mform += '                <tr class="pol" id="listA1">'
   mform += '                  <div id="rowA1">'
   mform += '                    <td><li>A1:</td>'
-  mform += '                    <td><input type="checkbox" class="inputParamBox" id="fixA1"></td>'
+  mform += '                    <td><input type="checkbox" class="inputParamBox" id="fixA1'+sframe+'"></td>'
   mform += '                    <td><input type="checkbox" class="inputParamBox" id="bondA1"></td>'
   mform += '                    <td><input type="text" class="inputParam" id="ParamA1" name="A1" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
   mform += '                    <td><input type="text" class="inputParam" id="ParamA1min" name="A1" onkeyup="updateSetSlider(this)"></td>'
@@ -590,7 +590,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA2">'
   mform += '                  <td><li>A2:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA2"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA2'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA2"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA2" name="A2" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA2min" name="A2" onkeyup="updateSetSlider(this)"></td>'
@@ -600,7 +600,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA3">'
   mform += '                  <td><li>A3:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA3"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA3'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA3"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA3"  name="A3" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA3min" name="A3" onkeyup="updateSetSlider(this)"></td>'
@@ -610,7 +610,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr class="pol" id="listA4">'
   mform += '                  <td><li>A4:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA4"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixA4'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondA4"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA4" name="A4" value="0" disabled=true onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamA4min" name="A4" onkeyup="updateSetSlider(this)"></td>'
@@ -636,7 +636,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr id="listMu">'
   mform += '                  <td><li>&mu;:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixMu"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixMu'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondMu"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamMu" name="Mu" value="0" onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamMumin" name="Mu" onkeyup="updateSetSlider(this)"></td>'
@@ -646,7 +646,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr id="listSigma">'
   mform += '                  <td><li>&sigma;:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixSigma"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixSigma'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondSigma"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamSigma" name="Sigma" value="1" onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamSigmamin" name="Sigma" onkeyup="updateSetSlider(this)"></td>'
@@ -656,7 +656,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr id="listAmplitude">'
   mform += '                  <td><li>A:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmplitude"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmplitude'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondAmplitude"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitude" name="Amplitude" value="1" onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudemin" name="Amplitude" onkeyup="updateSetSlider(this)"></td>'
@@ -682,7 +682,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr id="listK">'
   mform += '                  <td><li>K:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixK"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixK'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondK"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamK" name="K" value="0" onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamKmin" name="K" onkeyup="updateSetSlider(this)"></td>'
@@ -692,7 +692,7 @@ function generateHTMLcode(sframe){
   mform += '                </tr>'
   mform += '                <tr id="listAmpExp">'
   mform += '                  <td><li>A:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmpExp"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmpExp'+sframe+'"></td>'
   mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondAmpExp"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamAmpExp" name="AmpExp" value="1" onblur="updateSetSlider(this)"></td>'
   mform += '                  <td><input type="text" class="inputParam" id="ParamAmpExpmin" name="AmpExp" onkeyup="updateSetSlider(this)"></td>'
