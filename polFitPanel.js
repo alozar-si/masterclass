@@ -33,7 +33,7 @@ function initSliders(sframe){
         case 'Sigma':
           var min = 0;
           var max = 1;
-          var value = 0.1;
+          var value = 0.05;
           break;
 
         default:
