@@ -199,24 +199,7 @@ var result = JSON.parse( e.data );
                   r.insertAdjacentHTML('beforeend', '<div id="' + sframe +'" style="width:800px; height:500px"></div><br/>');//narise histogram
                   
                   r.insertAdjacentHTML('beforeend', '<div id="fit' + sframe +'" style="display: none"></div><br/>');
-                  if(sframe=='h0'){
-                    insertHTML('h0');
-                  }else{
-                    var fit = document.getElementById('fit'+ sframe);
-                    mform ='<form method="post" action="th1fit.php" onsubmit="return fitpanel(this);">';
-                    mform += '  Function:<input type="text"  size="20"  value="gaus"    name="fitfun" /><br/>';
-                    mform += '  Range: min=<input type="text" size="2" value="0"   name="min" />';
-                    mform += '  max=<input type="text" size="2"  value="20"   name="max" /><br/>';
-                    mform += '  Initial parameters (separated by ,)<input type="text" size="20" value=""    name="prm" /><br/>';
-                    mform += '  <input id="data'+ sframe +'" type="hidden" value="'+ result.message +'" name="data" />';
-                    mform += '  <input type="hidden" value="'+ sframe +'"    name="name" />';
-                    mform += '  <input class="mybutton" type="submit" value="  Fit  "/>';
-                    mform += '</form>';
-                    fit.insertAdjacentHTML('beforeend', '<div id="param' + sframe +'"></div><br/>');
-                    fit.insertAdjacentHTML('beforeend', mform);
-
-                    document.getElementById('data'+ sframe).value=result.message;
-                  }
+                  insertHTML(sframe);
                   r.insertAdjacentHTML('beforeend','<input type="button" onclick="togglevisibility(\'fit'+sframe+'\');"  class="mybutton" value="Show/Hide Fit Panel" />' );
                   r.insertAdjacentHTML('beforeend','&nbsp;<input type="button" onclick="toProcess();"  class="mybutton" value="To Process" /><hr/>' );
                   
@@ -224,7 +207,7 @@ var result = JSON.parse( e.data );
                 }
                 var frame = document.getElementById(sframe);
                 JSROOT.redraw(sframe, jsonobj, "hist", function(){
-                  if(sframe=='h0'){initSliders(sframe);}
+                  initSliders(sframe);
                 });
                 
                 

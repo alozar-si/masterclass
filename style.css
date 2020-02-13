@@ -69,3 +69,9 @@ cursor: pointer; /* Cursor on hover */
   margin-right: 7px;
   width: 100px;
 }
+
+div[name="ParamSlider"]{
+  margin-left: 5px;
+  margin-right: 7px;
+  width: 100px;
+}
