@@ -142,7 +142,7 @@ function getParamRangeMask(sframe){
     //find fixed values and mask them
     if(document.getElementById('bond'+varList[i] + sframe).checked){
       x[i]=1;
-      ranges.push([parseFloat(document.getElementById('Param'+varList[i]+'min').value), parseFloat(document.getElementById('Param'+varList[i]+'max').value)]);
+      ranges.push([parseFloat(document.getElementById('Param'+varList[i]+'min'+sframe).value), parseFloat(document.getElementById('Param'+varList[i]+'max'+sframe).value)]);
     }else{
       ranges.push([0, 0]);
     }
