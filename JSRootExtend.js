@@ -103,7 +103,7 @@ function GetParameters(TF1){
 }
 
 function CreateTF1Fit(param, sframe){
-  //This fuction can create gaus, pol0-5 and exp functions, or their combinations.
+  //This fuction can create gaus, pol0-5, exp and Breit-Wigner functions, or their combinations.
   var func = JSROOT.Create("TF1");
   var formula = JSROOT.Create("TFormula");
   var Npar = 0;
@@ -201,6 +201,5 @@ function CreateTF1Fit(param, sframe){
   func.fName = formula.fName;
   func.fLineColor = 2;
   func.fLineWidth = 2;
-  console.log(func);
   return func
 }

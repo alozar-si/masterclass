@@ -212,12 +212,11 @@ function setManualParameters(p, mask, sframe){
   //sets the value of parameters and correct max or min value if p greater or smaller
   
   var paramNames = ["Amplitude", "Mu", "Sigma", "A0", "A1", "A2", "A3", "A4", "AmpExp", "K", 'AmpBW', 'Gamma', 'M'];
-  console.log(mask);
-  console.log(p);
+
   for(var i = 0; i<paramNames.length; i++){
     if(mask[i]){
       document.getElementById("Param"+paramNames[i]+sframe).value = p[i];
-      console.log(paramNames[i], document.getElementById("Param"+paramNames[i]+sframe).value);
+
       var max = $("#Param"+paramNames[i]+"Set"+sframe).slider("option", "max");
       var min = $("#Param"+paramNames[i]+"Set"+sframe).slider("option", "min");
       
@@ -450,7 +449,7 @@ function genFunList(sframe){
     }
   }
   //console.log('store funList in this row in matrix ', k);
-  console.log('This is funMatrix', funMatrix);
+  //console.log('This is funMatrix', funMatrix);
   if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]+funMatrix[k][3]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
 }
 
@@ -523,7 +522,6 @@ function disableParamSlider(state, objId, sframe){
 
 function setDefaultParameters(name, sframe){
   //this function is used for setting parameters back to their default value after page refresh
-  console.log(name, $("#Param"+name+"Set"+sframe).slider("value"));
   $( "#Param"+name+sframe).val( $("#Param"+name+"Set"+sframe).slider("value") );
   $( "#Param"+name+"min"+sframe ).val( $("#Param"+name+"Set"+sframe).slider("option", "min") );
   $( "#Param"+name+"max"+sframe ).val( $("#Param"+name+"Set"+sframe).slider("option", "max") );
