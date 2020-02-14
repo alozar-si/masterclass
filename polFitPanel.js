@@ -153,8 +153,8 @@ function autoFit(sframe){
 
 function getParamRangeMask(sframe){
   //return mask to bond parameters inside of range
-  var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K'];
-  var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K', 'AmpBW', 'Gamma', 'M'];
+  var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var ranges = [];
   for(var i=0; i<varList.length; i++){
     //find fixed values and mask them
@@ -211,12 +211,13 @@ function getManualParameters(sframe){
 function setManualParameters(p, mask, sframe){
   //sets the value of parameters and correct max or min value if p greater or smaller
   
-  var paramNames = ["Amplitude", "Mu", "Sigma", "A0", "A1", "A2", "A3", "A4", "AmpExp", "K"];
-  //console.log(mask);
-  for(var i = 0; i<10; i++){
+  var paramNames = ["Amplitude", "Mu", "Sigma", "A0", "A1", "A2", "A3", "A4", "AmpExp", "K", 'AmpBW', 'Gamma', 'M'];
+  console.log(mask);
+  console.log(p);
+  for(var i = 0; i<paramNames.length; i++){
     if(mask[i]){
       document.getElementById("Param"+paramNames[i]+sframe).value = p[i];
-
+      console.log(paramNames[i], document.getElementById("Param"+paramNames[i]+sframe).value);
       var max = $("#Param"+paramNames[i]+"Set"+sframe).slider("option", "max");
       var min = $("#Param"+paramNames[i]+"Set"+sframe).slider("option", "min");
       
@@ -272,7 +273,7 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
 
   document.getElementById("ndfOutput"+sframe).innerHTML = ndf;
   document.getElementById("chi2Red"+sframe).innerHTML = (chi2/ndf).toPrecision(4);
-  console.log(y);
+  
   var g = JSROOT.CreateTGraph(N, x, y);
   var isTGraphOn = JSROOT.GetMainPainter(sframe).draw_object.fTGraphPlotted;
   if (typeof isTGraphOn === "undefined") {
@@ -312,8 +313,8 @@ function getNparameters(sframe){
 
 function getParametersMask(sframe){
   //return mask to fix parameters
-  var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K'];
+  var x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var varList = ['Amplitude', 'Mu', 'Sigma', 'A0', 'A1', 'A2', 'A3', 'A4', 'AmpExp', 'K', 'AmpBW', 'Gamma', 'M'];
   var i;
   var funList = getFunList(sframe);
   if(funList[0]==1){
@@ -337,6 +338,14 @@ function getParametersMask(sframe){
     x[8] = 1;
     x[9] = 1;
   }
+
+  if(funList[3]){
+    //BW function has 3 parameters
+    x[10] = 1;
+    x[11] = 1;
+    x[12] = 1;
+  }
+
   for(var i=0; i<varList.length; i++){
     //find fixed values and mask them
     if(document.getElementById('fix'+varList[i]+sframe).checked){
@@ -589,6 +598,8 @@ function generateHTMLcode(sframe){
   mform += '            <option value="BW+pol">Poly + Breit-Wigner</option>'
   mform += '            <option value="BW+expo">Expo + Breit-Wigner</option>'
   mform += '            <option value="BW+expo+poly">Breit-Wigner + Poly + Expo</option>'
+  mform += '            <option value="BW+gaus+poly">Breit-Wigner + Poly + Gaus</option>'
+  mform += '            <option value="BW+expo+gaus">Breit-Wigner + Expo + Gaus</option>'
   mform += '            <option value="gaus+pol+expo">Gaus + Poly + Expo</option>'
   mform += '          </select>'
   mform += '          <!--'

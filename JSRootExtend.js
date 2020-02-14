@@ -78,7 +78,7 @@ function Save(TF1, TH1, xmin, xmax){
     //var bin1 = TH1.fXaxis.FindBin(xmin, 0);
     //var bin2 = TH1.fXaxis.FindBin(xmax, 0);
     //console.log("bin1:", bin1, "bin2", bin2);
-    if(!TF1.fNpx) TF1.fNpx = 100; //number of  points to be plotted 
+    if(!TF1.fNpx) TF1.fNpx = 501; //number of  points to be plotted 
     //var fNsave = TF1.fNpx + 3; //number of  points to be plotted
     var dx = (xmax - xmin) / TF1.fNpx;
 
@@ -114,11 +114,11 @@ function CreateTF1Fit(param, sframe){
   var funList = getFunList(sframe);
   if(funList[0]){
     //Gaus function
-    var gausParameters = ["Constant", "Mean", "Sigma"];
+    var gausParameters = ["N", "Mean", "Sigma"];
     formula.fClingParameters.push(param[0]);
     formula.fClingParameters.push(param[1]);
     formula.fClingParameters.push(param[2]);
-    formula.fFormula =  "[Constant] * TMath::Gaus(x, [Mean], [Sigma])";
+    formula.fFormula =  "[N] * TMath::Gaus(x, [Mean], [Sigma])";
     
     for(var i = 0; i<3;i++){
       formula.fParams.push(JSROOT.Create("pair<TString,int,TFormulaParamOrder>"));
@@ -156,11 +156,11 @@ function CreateTF1Fit(param, sframe){
   }
   
   if(funList[2]){
-    var expParameters = ["A", "K"]
+    var expParameters = ["N", "K"]
     if((Npar > 0)){
       formula.fFormula += " + ";
     }
-    formula.fFormula += "[A] * exp([K] * x)";
+    formula.fFormula += "[N] * exp([K] * x)";
     formula.fClingParameters.push(param[8]);
     formula.fClingParameters.push(param[9]);
     
@@ -170,6 +170,24 @@ function CreateTF1Fit(param, sframe){
       formula.fParams[i+Npar].second = i+Npar;
     }
     Npar += 2;
+  }
+
+  if(funList[3]){
+    var BWParameters = ["NBW", "Gamma", "MeanBW"]
+    if((Npar > 0)){
+      formula.fFormula += " + ";
+    }
+    formula.fFormula += "[NBW] * TMath::BreitWigner(x, [MeanBW], [Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    formula.fClingParameters.push(param[10]);
+    formula.fClingParameters.push(param[11]);
+    formula.fClingParameters.push(param[12]);
+
+    for(var i = 0; i<3;i++){
+      formula.fParams.push(JSROOT.Create("pair<TString,int,TFormulaParamOrder>"));
+      formula.fParams[i+Npar].first = BWParameters[i];
+      formula.fParams[i+Npar].second = i+Npar;
+    }
+    Npar += 3;
   }
   
   formula.fName = "Fit function";
@@ -183,5 +201,6 @@ function CreateTF1Fit(param, sframe){
   func.fName = formula.fName;
   func.fLineColor = 2;
   func.fLineWidth = 2;
+  console.log(func);
   return func
 }
