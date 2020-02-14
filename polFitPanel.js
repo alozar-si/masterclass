@@ -1,8 +1,8 @@
-var funMatrix = [[0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-                [0, 0, 0]]
+var funMatrix = [[0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
 
 function initSliders(sframe){
   //console.log('CB function', sframe)
@@ -21,7 +21,7 @@ function initSliders(sframe){
         case 'Amplitude':
           var min = 0;
           var max = 10000;
-          var value = 1000;
+          var value = 100;
           break;
 
         case 'Mu':
@@ -34,6 +34,24 @@ function initSliders(sframe){
           var min = 0;
           var max = 1;
           var value = 0.05;
+          break;
+
+        case 'AmpBW':
+          var min = 0;
+          var max = 100;
+          var value = 1000;
+          break;
+
+        case 'Gamma':
+          var min = 0;
+          var max = 1;
+          var value = 0.5;
+          break;
+
+        case 'M':
+          var min = 0;
+          var max = 5;
+          var value = 0;
           break;
 
         default:
@@ -182,6 +200,10 @@ function getManualParameters(sframe){
 
   parametri.push(parseFloat(document.getElementById("ParamAmpExp"+sframe).value));
   parametri.push(parseFloat(document.getElementById("ParamK"+sframe).value));
+
+  parametri.push(parseFloat(document.getElementById("ParamAmpBW"+sframe).value));
+  parametri.push(parseFloat(document.getElementById("ParamGamma"+sframe).value));
+  parametri.push(parseFloat(document.getElementById("ParamM"+sframe).value));
   
   return parametri
 }
@@ -250,7 +272,7 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
 
   document.getElementById("ndfOutput"+sframe).innerHTML = ndf;
   document.getElementById("chi2Red"+sframe).innerHTML = (chi2/ndf).toPrecision(4);
-
+  console.log(y);
   var g = JSROOT.CreateTGraph(N, x, y);
   var isTGraphOn = JSROOT.GetMainPainter(sframe).draw_object.fTGraphPlotted;
   if (typeof isTGraphOn === "undefined") {
@@ -343,9 +365,10 @@ function calcMasterFun(x, parametri, sframe){
   parametriGaus = [parametri[0], parametri[1], parametri[2]];
   parametriPol = [parametri[3], parametri[4], parametri[5], parametri[6], parametri[7]];
   parametriExp = [parametri[8], parametri[9]];
+  parametriBW = [parametri[10], parametri[11], parametri[12]];
   //console.log(parametriExp);
   var funList = getFunList(sframe);
-  return funList[0]*gaus(x, parametriGaus) + funList[1]*pol(x, parametriPol) + funList[2]*expo(x, parametriExp);
+  return funList[0]*gaus(x, parametriGaus) + funList[1]*pol(x, parametriPol) + funList[2]*expo(x, parametriExp) + funList[3]*BW(x, parametriBW);
 }
 
 function calcMasterFun2(x, parametri, sframe){
@@ -380,6 +403,13 @@ function expo(x, p){
   return a * Math.exp(k * x);
 }
 
+function BW(x, p){
+  var a = p[0];
+  var gamma = p[1];
+  var M = p[2];
+  return a / (2 * Math.PI) * gamma / (Math.pow(x-M, 2) + Math.pow(gamma/2, 2));
+}
+
 function divClean(divid){
   JSROOT.cleanup(divid);
 }
@@ -395,7 +425,7 @@ function genFunList(sframe){
   //actualy does not show, but only creates funList, funList should go in TH1.funList?
   var funfit = document.getElementById("selectFitFun"+sframe).value;
   var funfit2 = funfit.split(/[ +]/);
-  var implementedFun = ["gaus", "pol", "expo"] //
+  var implementedFun = ["gaus", "pol", "expo", "BW"] //
   var funList = getFunList(sframe);
   var k = parseInt(sframe.slice(1)); //get histogram number 0, 1, 2, ...
 
@@ -411,8 +441,8 @@ function genFunList(sframe){
     }
   }
   //console.log('store funList in this row in matrix ', k);
-  //console.log('This is funMatrix', funMatrix);
-  if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
+  console.log('This is funMatrix', funMatrix);
+  if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]+funMatrix[k][3]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
 }
 
 function updatePolParamList(n, sframe){
@@ -551,9 +581,14 @@ function generateHTMLcode(sframe){
   mform += '            <option value="gaus">Gaus</option>'
   mform += '            <option value="pol">Poly</option>'
   mform += '            <option value="expo">Expo</option>'
+  mform += '            <option value="BW">Breit-Wigner</option>'
   mform += '            <option value="gaus+pol">Gaus + Poly</option>'
   mform += '            <option value="gaus+expo">Gaus + Expo</option>'
+  mform += '            <option value="BW+gaus">Gaus + Breit-Wigner</option>'
   mform += '            <option value="pol+expo">Poly + Expo</option>'
+  mform += '            <option value="BW+pol">Poly + Breit-Wigner</option>'
+  mform += '            <option value="BW+expo">Expo + Breit-Wigner</option>'
+  mform += '            <option value="BW+expo+poly">Breit-Wigner + Poly + Expo</option>'
   mform += '            <option value="gaus+pol+expo">Gaus + Poly + Expo</option>'
   mform += '          </select>'
   mform += '          <!--'
@@ -676,6 +711,54 @@ function generateHTMLcode(sframe){
   mform += '              </tbody>'
   mform += '            </table>'
   mform += '          </div>'
+
+  mform += '          <div id="BWFitPanel' + sframe + '">'
+  mform += '            <table class="inputParametersTable" id="inputParamTableBW">'
+  mform += '              <tbody>'
+  mform += '                <tr class="description">'
+  mform += '                  <td>Name</td>'
+  mform += '                  <td>Fix</td>'
+  mform += '                  <td>Bond</td>'
+  mform += '                  <td>Value</td>'
+  mform += '                  <td>Min</td>'
+  mform += '                  <td>Set</td>'
+  mform += '                  <td>Max</td>'
+  mform += '                  <td>Step</td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listGamma">'
+  mform += '                  <td><li>&Gamma;:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixGamma'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondGamma'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamGamma'+sframe+'" name="Gamma" value="0" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamGammamin'+sframe+'" name="Gamma" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamGammaSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamGammamax'+sframe+'" name="Gamma" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamGammastep'+sframe+'" name="Gamma" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listM">'
+  mform += '                  <td><li>M:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixM'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondM'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamM'+sframe+'" name="M" value="1" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMmin'+sframe+'" name="M" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamMSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMmax'+sframe+'" name="M" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMstep'+sframe+'" name="M" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listAmpBW">'
+  mform += '                  <td><li>A:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmpBW'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondAmpBW'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmpBW'+sframe+'" name="AmpBW" value="1" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmpBWmin'+sframe+'" name="AmpBW" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamAmpBWSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmpBWmax'+sframe+'" name="AmpBW" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmpBWstep'+sframe+'" name="AmpBW" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '              </tbody>'
+  mform += '            </table>'
+  mform += '          </div>'
+
   mform += '          <div id="expoFitPanel' + sframe + '">'
   mform += '            <table class="inputParametersTable" id="inputParamTableExpo">'
   mform += '              <tbody>'
