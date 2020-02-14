@@ -30,7 +30,7 @@ table {
 
 th, td {
     padding: 0px;
-    text-align: right;
+    /*text-align: right;*/
 }
 
 tr:hover{background-color:#ffffff}

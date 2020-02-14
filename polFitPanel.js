@@ -44,14 +44,14 @@ function initSliders(sframe){
       }
 
       $(this).slider({
-        range: false, min: min, max: max, value:value, step: 0.001,    
+        range: false, min: min, max: max, value:value, step: 0.0001,    
         slide: function( event, ui ) {
           $( ID.slice(0,n-5)+sframe ).val(ui.value);
           calculate(sframe);
         },
         change: function( event, ui ){
           $( ID.slice(0,n-5)+sframe ).val(ui.value);
-          console.log("This is a change", ID.slice(0,n-5)+sframe, ID, this.id);
+          //console.log("This is a change", ID.slice(0,n-5)+sframe, ID, this.id);
           calculate(sframe);
         }
       });
@@ -64,7 +64,7 @@ function initSliders(sframe){
       range: true,
       min: obj.fXaxis.fXmin,
       max: obj.fXaxis.fXmax,
-      step: (obj.fXaxis.fXmax-obj.fXaxis.fXmin)/100,
+      step: (obj.fXaxis.fXmax-obj.fXaxis.fXmin)/1000,
       values: [ obj.fXaxis.fXmin, obj.fXaxis.fXmax ],
       slide: function( event, ui ) {
         document.getElementById("minRange"+sframe).value = ui.values[0];
@@ -332,13 +332,9 @@ function getDataFromHisto(divid){
   var y = [];
   var data = [];
   for(var i=1; i<=N-2; ++i){
-    //console.log(obj.fArray[i] + " " + obj.fXaxis.GetBinCenter(i));
     data.push([obj.fXaxis.GetBinCenter(i), obj.fArray[i]]);
-    //x.push(obj.fXaxis.GetBinCenter(i));
-    //y.push(obj.fArray[i]);
   }
-  //console.log(x, y);
-  //console.log(JSROOT.GetMainPainter(divid).draw_object);
+
   return data
 }
 
@@ -414,8 +410,8 @@ function genFunList(sframe){
       document.getElementById(implementedFun[i]+"FitPanel"+sframe).style.display = "none";
     }
   }
-  console.log('store funList in this row in matrix ', k);
-  console.log('This is funMatrix', funMatrix);
+  //console.log('store funList in this row in matrix ', k);
+  //console.log('This is funMatrix', funMatrix);
   if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
 }
 
@@ -499,7 +495,7 @@ function updateSetSlider(id){
   //Get id to update its slider ?min? value
   var sframe = id.id.slice(id.id.length-2);
   var last = id.id[id.id.length-3]; //it can be steP, maX or miN
-  console.log(id.id, last, sframe)
+  //console.log(id.id, last, sframe)
   switch (last) {
     case "p":
       //console.log("Set step: " + id.value);
@@ -537,7 +533,18 @@ function generateHTMLcode(sframe){
   //console.log('generate html')
   //mform = '<div id="fith0">'' + sframe + '
   mform = '<button type="button" onclick="calculate('+ "'" + sframe + "'"+')">Draw Function</button>';        
-  mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit.</button>'; 
+  mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit</button>'; 
+  mform += '<div class="rangeSettings">';
+  mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange'+sframe+'" disabled=true>';
+  mform += 'max = <input type="text" size="2" value="5" name="max" id="maxRange'+sframe+'" disabled=true>';
+  mform += '<div style="display: inline-block;">';
+  mform += '&nbsp; &chi;²/ndf = <output id="chi2Output'+ sframe +'"></output> / <output id="ndfOutput'+ sframe +'"></output> = <output id="chi2Red'+ sframe +'"></output> <br>';
+  mform += '</div>';
+  mform += '<div class="slidecontainer" style="width:600px">';
+  //mform += '<div class="slider-range" id="slider-range'+sframe+'"></div>';
+  mform += '<div class="slider-range" id="slider-range'+ sframe +'"></div>';
+  mform += '</div>';
+  mform += '</div>'
   mform += '        <div id="fitPanel">'
   mform += '          Function:'
   mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="genFunList(' + "'" + sframe + "'"+ ')">'
@@ -706,19 +713,7 @@ function generateHTMLcode(sframe){
   mform += '            </table>'
   mform += '          </div>'
   mform += '        </div>'
-  mform += '<div class="rangeSettings">';
-  mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange'+sframe+'" disabled=true>';
-  mform += 'max = <input type="text" size="2" value="5" name="max" id="maxRange'+sframe+'" disabled=true>';
-  mform += '<div style="display: inline-block;">';
-  mform += '&nbsp; &chi;²/ndf = <output id="chi2Output'+ sframe +'"></output> / <output id="ndfOutput'+ sframe +'"></output> = <output id="chi2Red'+ sframe +'"></output> <br>';
-  mform += '</div>';
-  mform += '<div class="slidecontainer" style="width:600px">';
-  //mform += '<div class="slider-range" id="slider-range'+sframe+'"></div>';
-  mform += '<div class="slider-range" id="slider-range'+ sframe +'"></div>';
-  mform += '</div>';
-  mform += '      </div>'
 
-  //mform += '</div>';
   return mform
 }
 

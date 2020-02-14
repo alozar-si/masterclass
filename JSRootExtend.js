@@ -176,8 +176,9 @@ function CreateTF1Fit(param, sframe){
   //formula.fNdim = 1;
   formula.fTitle = "Fit function";
   formula.fNparam = Npar;
-
+  //func.fParErrors = [1, 1, 1]; // to display parameters' error use this line
   func.fFormula = formula;
+  func.fNpar = formula.fNparam;
   func.fTitle = formula.fTitle;
   func.fName = formula.fName;
   func.fLineColor = 2;
