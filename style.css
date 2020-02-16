@@ -75,3 +75,15 @@ div[name="ParamSlider"]{
   margin-right: 7px;
   width: 100px;
 }
+
+.functionSelect{
+  padding-top: 10px;
+}
+
+.FitPanel{
+  padding-top: 10px;
+}
+
+.rangeSettings{
+  padding-top: 10px;
+}

@@ -22,6 +22,17 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="polFitPanel.js"></script>
   <script src="fminsearch.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <script type="text/javascript" src="displayFormula.js"></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [["$","$"],["\\(","\\)"]]
+    }
+  });
+</script>
+
+
 <style>
 table {
     border-collapse: collapse;
@@ -356,6 +367,10 @@ function loadDoc( url ) {
 	  	  
 </head>
 <body>
+<button type="button" onclick="showFormula('a+b*x+c*x^2', 'h0')">Click to show div1</button>
+<button type="button" onclick="showFormula('a+b*x+c*x^2', 'h1')">Click to show div2</button>
+<div id="formulaDisplayh0">${}$</div>
+
   <h1>Belle II Particle Discovery: Describe process &rarr;Analyse &rarr;Fit results &rarr;Discover</h1>
 <!--        <input type="button" onclick="showCode();"  class="mybutton" value="Show JavaScript" /> -->
         <input type="button" id="btnstart" onclick="startAction();"  class="mybutton" value="Run Analysis" />

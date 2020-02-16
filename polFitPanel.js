@@ -450,7 +450,59 @@ function genFunList(sframe){
   }
   //console.log('store funList in this row in matrix ', k);
   //console.log('This is funMatrix', funMatrix);
+  fName = genFunctionName(sframe);
+  showFormula(fName, sframe);
   if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]+funMatrix[k][3]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
+}
+
+function genFunctionName(sframe){
+  var funList = getFunList(sframe);
+  var fName = "";
+  var Npar = 0;
+  if(funList[0]){
+    //Gaus function
+    fName =  "[N] * exp(x, [Mean], [Sigma])";
+    Npar += 3;
+  }
+  
+  if(funList[1]){
+    //pol function
+    var n = parseInt(document.getElementById("polOrderDisplay"+sframe).value);
+    
+    for(var i=0; i<=n; ++i){
+      if((i>0) || (Npar > 0)){
+        fName += " + ";
+      }
+
+      if(i==0){
+        fName += "[p" + String(i) + "]";
+      }else{
+        if(i==1){
+          fName += "[p" + String(i) + "] * x";
+        }else{
+          fName += "[p" + String(i) + "] * x^" + String(i);
+        }
+      }
+    }
+    Npar += n+1;
+  }
+  
+  if(funList[2]){
+    if((Npar > 0)){
+      fName += " + ";
+    }
+    fName += "[N] * exp([K] * x)";
+    Npar += 2;
+  }
+
+  if(funList[3]){
+    if((Npar > 0)){
+      fName += " + ";
+    }
+    fName += "[NBW] * BreitWigner(x, [MeanBW], [Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    Npar += 3;
+  }
+  return fName;
 }
 
 function updatePolParamList(n, sframe){
@@ -583,28 +635,78 @@ function generateHTMLcode(sframe){
   mform += '</div>';
   mform += '</div>'
   mform += '        <div id="fitPanel">'
-  mform += '          Function:'
-  mform += '          <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="genFunList(' + "'" + sframe + "'"+ ')">'
-  mform += '            <option value="gaus">Gaus</option>'
-  mform += '            <option value="pol">Poly</option>'
-  mform += '            <option value="expo">Expo</option>'
-  mform += '            <option value="BW">Breit-Wigner</option>'
-  mform += '            <option value="gaus+pol">Gaus + Poly</option>'
-  mform += '            <option value="gaus+expo">Gaus + Expo</option>'
-  mform += '            <option value="BW+gaus">Gaus + Breit-Wigner</option>'
-  mform += '            <option value="pol+expo">Poly + Expo</option>'
-  mform += '            <option value="BW+pol">Poly + Breit-Wigner</option>'
-  mform += '            <option value="BW+expo">Expo + Breit-Wigner</option>'
-  mform += '            <option value="BW+expo+poly">Breit-Wigner + Poly + Expo</option>'
-  mform += '            <option value="BW+gaus+poly">Breit-Wigner + Poly + Gaus</option>'
-  mform += '            <option value="BW+expo+gaus">Breit-Wigner + Expo + Gaus</option>'
-  mform += '            <option value="gaus+pol+expo">Gaus + Poly + Expo</option>'
-  mform += '          </select>'
+  mform += '          <div class="functionSelect">'
+  mform += '            Function:'
+  mform += '            <select  name="fitfun" id="selectFitFun'+sframe+'" onclick="genFunList(' + "'" + sframe + "'"+ ')">'
+  mform += '              <option value="gaus">Gaus</option>'
+  mform += '              <option value="pol">Poly</option>'
+  mform += '              <option value="expo">Expo</option>'
+  mform += '              <option value="BW">Breit-Wigner</option>'
+  mform += '              <option value="gaus+pol">Gaus + Poly</option>'
+  mform += '              <option value="gaus+expo">Gaus + Expo</option>'
+  mform += '              <option value="BW+gaus">Gaus + Breit-Wigner</option>'
+  mform += '              <option value="pol+expo">Poly + Expo</option>'
+  mform += '              <option value="BW+pol">Poly + Breit-Wigner</option>'
+  mform += '              <option value="BW+expo">Expo + Breit-Wigner</option>'
+  mform += '              <option value="BW+expo+pol">Breit-Wigner + Poly + Expo</option>'
+  mform += '              <option value="BW+gaus+pol">Breit-Wigner + Poly + Gaus</option>'
+  mform += '              <option value="BW+expo+gaus">Breit-Wigner + Expo + Gaus</option>'
+  mform += '              <option value="gaus+pol+expo">Gaus + Poly + Expo</option>'
+  mform += '            </select>'
+  mform += '            <span id="functionDisplay'+sframe+'"></span>'
+  mform += '          </div>'
   mform += '          <!--'
   mform += '            This was replaced b select:option'
   mform += '            <input type="text" name="fitfun" id="fitfun" value="pol" onblur="genFunList()"><br>'
   mform += '          -->'
-  mform += '          <div id="polFitPanel' + sframe + '">'
+  mform += '          <div id="gausFitPanel' + sframe + '" class="FitPanel">'
+  mform += '            <table class="inputParametersTable" id="inputParamTableGaus">'
+  mform += '              <tbody>'
+  mform += '                <tr class="description">'
+  mform += '                  <td>Name</td>'
+  mform += '                  <td>Fix</td>'
+  mform += '                  <td>Bond</td>'
+  mform += '                  <td>Value</td>'
+  mform += '                  <td>Min</td>'
+  mform += '                  <td>Set</td>'
+  mform += '                  <td>Max</td>'
+  mform += '                  <td>Step</td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listMu">'
+  mform += '                  <td><li>&mu;:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixMu'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondMu'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMu'+sframe+'" name="Mu" value="0" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMumin'+sframe+'" name="Mu" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamMuSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMumax'+sframe+'" name="Mu" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamMustep'+sframe+'" name="Mu" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listSigma">'
+  mform += '                  <td><li>&sigma;:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixSigma'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondSigma'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamSigma'+sframe+'" name="Sigma" value="1" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmamin'+sframe+'" name="Sigma" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamSigmaSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmamax'+sframe+'" name="Sigma" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmastep'+sframe+'" name="Sigma" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '                <tr id="listAmplitude">'
+  mform += '                  <td><li>A:</td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmplitude'+sframe+'"></td>'
+  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondAmplitude'+sframe+'"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitude'+sframe+'" name="Amplitude" value="1" onblur="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudemin'+sframe+'" name="Amplitude" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamAmplitudeSet'+sframe+'"></div></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudemax'+sframe+'" name="Amplitude" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudestep'+sframe+'" name="Amplitude" value="0.1" onkeyup="updateSetSlider(this)"></td>'
+  mform += '                </tr>'
+  mform += '              </tbody>'
+  mform += '            </table>'
+  mform += '          </div>'
+
+  mform += '          <div id="polFitPanel' + sframe + '" class="FitPanel">'
   mform += '            Polynomial order: <input type="text" name="polOrder" id="polOrderDisplay' + sframe + '" size="1" disabled=true>'
   mform += '            <div style="width: 100px;display: inline-block;" id="slider-polOrder' + sframe + '"></div>'
   mform += '            <table class="inputParametersTable">'
@@ -674,54 +776,9 @@ function generateHTMLcode(sframe){
   mform += '              </tbody>'
   mform += '            </table>'
   mform += '          </div>'
-  mform += '          <div id="gausFitPanel' + sframe + '">'
-  mform += '            <table class="inputParametersTable" id="inputParamTableGaus">'
-  mform += '              <tbody>'
-  mform += '                <tr class="description">'
-  mform += '                  <td>Name</td>'
-  mform += '                  <td>Fix</td>'
-  mform += '                  <td>Bond</td>'
-  mform += '                  <td>Value</td>'
-  mform += '                  <td>Min</td>'
-  mform += '                  <td>Set</td>'
-  mform += '                  <td>Max</td>'
-  mform += '                  <td>Step</td>'
-  mform += '                </tr>'
-  mform += '                <tr id="listMu">'
-  mform += '                  <td><li>&mu;:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixMu'+sframe+'"></td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondMu'+sframe+'"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamMu'+sframe+'" name="Mu" value="0" onblur="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamMumin'+sframe+'" name="Mu" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamMuSet'+sframe+'"></div></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamMumax'+sframe+'" name="Mu" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamMustep'+sframe+'" name="Mu" value="0.1" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                </tr>'
-  mform += '                <tr id="listSigma">'
-  mform += '                  <td><li>&sigma;:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixSigma'+sframe+'"></td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondSigma'+sframe+'"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamSigma'+sframe+'" name="Sigma" value="1" onblur="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmamin'+sframe+'" name="Sigma" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamSigmaSet'+sframe+'"></div></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmamax'+sframe+'" name="Sigma" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamSigmastep'+sframe+'" name="Sigma" value="0.1" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                </tr>'
-  mform += '                <tr id="listAmplitude">'
-  mform += '                  <td><li>A:</td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="fixAmplitude'+sframe+'"></td>'
-  mform += '                  <td><input type="checkbox" class="inputParamBox" id="bondAmplitude'+sframe+'"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitude'+sframe+'" name="Amplitude" value="1" onblur="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudemin'+sframe+'" name="Amplitude" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><div name="ParamSlider" class="ParamSlider'+sframe+'" id="ParamAmplitudeSet'+sframe+'"></div></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudemax'+sframe+'" name="Amplitude" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                  <td><input type="text" class="inputParam" id="ParamAmplitudestep'+sframe+'" name="Amplitude" value="0.1" onkeyup="updateSetSlider(this)"></td>'
-  mform += '                </tr>'
-  mform += '              </tbody>'
-  mform += '            </table>'
-  mform += '          </div>'
 
-  mform += '          <div id="BWFitPanel' + sframe + '">'
+
+  mform += '          <div id="BWFitPanel' + sframe + '" class="FitPanel">'
   mform += '            <table class="inputParametersTable" id="inputParamTableBW">'
   mform += '              <tbody>'
   mform += '                <tr class="description">'
@@ -768,7 +825,7 @@ function generateHTMLcode(sframe){
   mform += '            </table>'
   mform += '          </div>'
 
-  mform += '          <div id="expoFitPanel' + sframe + '">'
+  mform += '          <div id="expoFitPanel' + sframe + '" class="FitPanel">'
   mform += '            <table class="inputParametersTable" id="inputParamTableExpo">'
   mform += '              <tbody>'
   mform += '                <tr class="description">'
