@@ -461,7 +461,7 @@ function genFunctionName(sframe){
   var Npar = 0;
   if(funList[0]){
     //Gaus function
-    fName =  "[N] * exp(x, [Mean], [Sigma])";
+    fName =  "N \\cdot e^{-(\\frac{x-Mean}{2 \\cdot Sigma})^2}";
     Npar += 3;
   }
   
@@ -475,12 +475,12 @@ function genFunctionName(sframe){
       }
 
       if(i==0){
-        fName += "[p" + String(i) + "]";
+        fName += "p" + String(i);
       }else{
         if(i==1){
-          fName += "[p" + String(i) + "] * x";
+          fName += "p" + String(i) + " \\cdot x";
         }else{
-          fName += "[p" + String(i) + "] * x^" + String(i);
+          fName += "p" + String(i) + " \\cdot x^" + String(i);
         }
       }
     }
@@ -491,7 +491,7 @@ function genFunctionName(sframe){
     if((Npar > 0)){
       fName += " + ";
     }
-    fName += "[N] * exp([K] * x)";
+    fName += "N_{exp} \\cdot e^{K \\cdot x}";
     Npar += 2;
   }
 
@@ -499,7 +499,8 @@ function genFunctionName(sframe){
     if((Npar > 0)){
       fName += " + ";
     }
-    fName += "[NBW] * BreitWigner(x, [MeanBW], [Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    fName += "N_{BW} \\cdot  \\frac{1}{2 \\pi} \\frac{\\Gamma}{(x - Mean_{BW})^2 + (\\Gamma/2)^2)} "; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+   
     Npar += 3;
   }
   return fName;

@@ -25,7 +25,7 @@
 function showFormula(formula, sframe){
   //formula to be displayed in divid formulaDisplay+sframe
   spanID = 'functionDisplay' + sframe;
-  var QUEUE = MathJax.Hub.queue;
+  //var QUEUE = MathJax.Hub.queue;
   //QUEUE.Push(["Text",MathJax.Hub.getAllJax(divid)[0],"\\displaystyle{"+formula+"}"]);
   //MathJax.HTML.addElement(document.getElementById("functionDisplay"+sframe), "span", {id: spanID}, ['$$'+formula+'$$']);
   document.getElementById("functionDisplay"+sframe).innerHTML = '$'+formula+'$';//"$Z^{\prime}$";//genFunctionName(sframe);
