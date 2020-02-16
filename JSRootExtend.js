@@ -156,11 +156,11 @@ function CreateTF1Fit(param, sframe){
   }
   
   if(funList[2]){
-    var expParameters = ["N", "K"]
+    var expParameters = ["Nexp", "K"]
     if((Npar > 0)){
       formula.fFormula += " + ";
     }
-    formula.fFormula += "[N] * exp([K] * x)";
+    formula.fFormula += "[Nexp] * exp([K] * x)";
     formula.fClingParameters.push(param[8]);
     formula.fClingParameters.push(param[9]);
     
