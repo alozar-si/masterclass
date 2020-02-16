@@ -5,10 +5,8 @@ var funMatrix = [[0, 0, 0, 0],
                 [0, 0, 0, 0]]
 
 function initSliders(sframe){
-  //console.log('CB function', sframe)
   genFunList(sframe);
   var obj = JSROOT.GetMainPainter(sframe).draw_object; //get the histogram
-  //console.log(obj);
   
   //Initialise all ParameterSliders
   $( function() {
@@ -16,7 +14,6 @@ function initSliders(sframe){
       var ID = String('#'+this.id);
       var n = ID.length;
       var paramName = ID.slice(6,n-5);
-      //console.log(paramName);
       switch (paramName) {
         case 'Amplitude':
           var min = 0;
@@ -69,7 +66,6 @@ function initSliders(sframe){
         },
         change: function( event, ui ){
           $( ID.slice(0,n-5)+sframe ).val(ui.value);
-          //console.log("This is a change", ID.slice(0,n-5)+sframe, ID, this.id);
           calculate(sframe);
         }
       });
@@ -103,8 +99,6 @@ function initSliders(sframe){
       step: 1,
       value: 1,
       slide: function( event, ui ) {
-        //$( "#amount" ).val( "from " + ui.values[ 0 ] + " to " + ui.values[ 1 ] );
-        //document.getElementById("polOrderDisplay").value = ui.value;
         $( "#polOrderDisplay" + sframe ).val(ui.value);
         updatePolParamList(ui.value, sframe);
         calculate(sframe);
@@ -137,7 +131,6 @@ function autoFit(sframe){
   var p0 = getManualParameters(sframe);
   var maskParam = getParametersMask(sframe); //use only these parameters, all others are fixed or un used
   var maskParamRange = getParamRangeMask(sframe);
-  //console.log(maskParamRange);
   var result = fminsearch(calcMasterFun2, p0, x, y, {maxIter:100, mask:maskParam, maskBond:maskParamRange, sframe:sframe});
   var Parm0 = result[0];
   var chi2 = result[1];
@@ -148,7 +141,6 @@ function autoFit(sframe){
   funkcija.fChisquare = chi2;
   funkcija.fNDF = NdataPoints-getNparameters(sframe); //calculate ndf
   StoreAndDrawFitFunction(obj, funkcija, [xmin, xmax], 1, sframe);
-  //calculate(Parm0);//call to draw function
 }
 
 function getParamRangeMask(sframe){
@@ -260,8 +252,6 @@ function fitMasterFun(xmin, xmax, N, parametri, sframe){
   }
   
   var chi2 = sum.toPrecision(4);
-  
-  //console.log(chi2);
   //display chi^2
   document.getElementById("chi2Output"+sframe).innerHTML = chi2;
   
@@ -374,7 +364,6 @@ function calcMasterFun(x, parametri, sframe){
   parametriPol = [parametri[3], parametri[4], parametri[5], parametri[6], parametri[7]];
   parametriExp = [parametri[8], parametri[9]];
   parametriBW = [parametri[10], parametri[11], parametri[12]];
-  //console.log(parametriExp);
   var funList = getFunList(sframe);
   return funList[0]*gaus(x, parametriGaus) + funList[1]*pol(x, parametriPol) + funList[2]*expo(x, parametriExp) + funList[3]*BW(x, parametriBW);
 }
@@ -448,8 +437,7 @@ function genFunList(sframe){
       document.getElementById(implementedFun[i]+"FitPanel"+sframe).style.display = "none";
     }
   }
-  //console.log('store funList in this row in matrix ', k);
-  //console.log('This is funMatrix', funMatrix);
+
   fName = genFunctionName(sframe);
   showFormula(fName, sframe);
   if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]+funMatrix[k][3]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
@@ -548,7 +536,6 @@ function updatePolParamList(n, sframe){
 function disableInput(state, objId, sframe){
   //Change disabled state of parameters inputs
   disableParamSlider(state, objId, sframe);
-  //console.log(state, objId, name);
   var obj = document.getElementById(objId).getElementsByTagName("input");//find inputs inside of row
   for (var i = 0; i < obj.length; i++) {
     obj[i].disabled = state; //set state of inputs
@@ -585,25 +572,20 @@ function updateSetSlider(id){
   //Get id to update its slider ?min? value
   var sframe = id.id.slice(id.id.length-2);
   var last = id.id[id.id.length-3]; //it can be steP, maX or miN
-  //console.log(id.id, last, sframe)
   switch (last) {
     case "p":
-      //console.log("Set step: " + id.value);
       $("#Param"+id.name+"Set"+sframe).slider("option", "step", parseFloat(id.value));
       break;
 
     case "x":
-      //console.log("Set max: " + id.value);
       $("#Param"+id.name+"Set"+sframe).slider("option", "max", parseFloat(id.value));
       break;
 
     case "n":
-      //console.log("Set min: " + id.value);
       $("#Param"+id.name+"Set"+sframe).slider("option", "min", parseFloat(id.value));
       break;
 
     default:
-      //console.log("Set value: " + id.name + " " + id.value + ", max is "+ $("#Param"+id.name+"Set").slider("option", "max"));
       if(id.value > $("#Param"+id.name+"Set"+sframe).slider("option", "max")){ alert("Inserted value is to big."); }
       if(id.value < $("#Param"+id.name+"Set"+sframe).slider("option", "min")){ alert("Inserted value is to small."); }
       $("#Param"+id.name+"Set"+sframe).slider("value", parseFloat(id.value));
@@ -612,7 +594,6 @@ function updateSetSlider(id){
 }
 
 function insertHTML(sframe, callback){
-  //console.log('This is sframe:', sframe)
   var r = document.getElementById('fit'+sframe);
   var htmlCode = generateHTMLcode(sframe);
   r.insertAdjacentHTML('beforeend', htmlCode);
@@ -620,8 +601,7 @@ function insertHTML(sframe, callback){
 }
 
 function generateHTMLcode(sframe){
-  //console.log('generate html')
-  //mform = '<div id="fith0">'' + sframe + '
+
   mform = '<button type="button" onclick="calculate('+ "'" + sframe + "'"+')">Draw Function</button>';        
   mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit</button>'; 
   mform += '<div class="rangeSettings">';
@@ -631,7 +611,6 @@ function generateHTMLcode(sframe){
   mform += '&nbsp; &chi;²/ndf = <output id="chi2Output'+ sframe +'"></output> / <output id="ndfOutput'+ sframe +'"></output> = <output id="chi2Red'+ sframe +'"></output> <br>';
   mform += '</div>';
   mform += '<div class="slidecontainer" style="width:600px">';
-  //mform += '<div class="slider-range" id="slider-range'+sframe+'"></div>';
   mform += '<div class="slider-range" id="slider-range'+ sframe +'"></div>';
   mform += '</div>';
   mform += '</div>'
