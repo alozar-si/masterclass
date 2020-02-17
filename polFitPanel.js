@@ -632,6 +632,7 @@ function generateHTMLcode(sframe){
   mform += '              <option value="BW+gaus+pol">Breit-Wigner + Poly + Gaus</option>'
   mform += '              <option value="BW+expo+gaus">Breit-Wigner + Expo + Gaus</option>'
   mform += '              <option value="gaus+pol+expo">Gaus + Poly + Expo</option>'
+  mform += '              <option value="BW+expo+gaus+pol">Breit-Wigner + Expo + Gaus + Poly</option>'
   mform += '            </select>'
   mform += '            <span id="functionDisplay'+sframe+'"></span>'
   mform += '          </div>'

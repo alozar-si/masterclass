@@ -137,7 +137,7 @@ function startTask() {
        //a message is received
         es.addEventListener('message',EventListener);      
         es.addEventListener('error', function(e) {
-        addLog('Error occurred');
+        //addLog('Error occurred');
         stopTask();
         //es.close();
     });
