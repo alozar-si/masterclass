@@ -449,7 +449,7 @@ function genFunctionName(sframe){
   var Npar = 0;
   if(funList[0]){
     //Gaus function
-    fName =  "N \\cdot e^{-(\\frac{x-Mean}{2 \\cdot Sigma})^2}";
+    fName =  "N \\cdot e^{-(\\frac{x-\\mu}{2 \\sigma})^2}";
     Npar += 3;
   }
   

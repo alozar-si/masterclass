@@ -114,11 +114,11 @@ function CreateTF1Fit(param, sframe){
   var funList = getFunList(sframe);
   if(funList[0]){
     //Gaus function
-    var gausParameters = ["N", "Mean", "Sigma"];
+    var gausParameters = ["N", "#mu", "#sigma"];
     formula.fClingParameters.push(param[0]);
     formula.fClingParameters.push(param[1]);
     formula.fClingParameters.push(param[2]);
-    formula.fFormula =  "[N] * TMath::Gaus(x, [Mean], [Sigma])";
+    formula.fFormula =  "[N] * TMath::Gaus(x, [#mu], [#sigma])";
     
     for(var i = 0; i<3;i++){
       formula.fParams.push(JSROOT.Create("pair<TString,int,TFormulaParamOrder>"));
@@ -156,11 +156,11 @@ function CreateTF1Fit(param, sframe){
   }
   
   if(funList[2]){
-    var expParameters = ["Nexp", "K"]
+    var expParameters = ["N_{exp}", "K"]
     if((Npar > 0)){
       formula.fFormula += " + ";
     }
-    formula.fFormula += "[Nexp] * exp([K] * x)";
+    formula.fFormula += "[N_{exp}] * exp([K] * x)";
     formula.fClingParameters.push(param[8]);
     formula.fClingParameters.push(param[9]);
     
@@ -173,11 +173,11 @@ function CreateTF1Fit(param, sframe){
   }
 
   if(funList[3]){
-    var BWParameters = ["NBW", "Gamma", "MeanBW"]
+    var BWParameters = ["N_{BW}", "#Gamma", "Mean_{BW}"]
     if((Npar > 0)){
       formula.fFormula += " + ";
     }
-    formula.fFormula += "[NBW] * TMath::BreitWigner(x, [MeanBW], [Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    formula.fFormula += "[N_{BW}] * TMath::BreitWigner(x, [Mean_{BW}], [#Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
     formula.fClingParameters.push(param[10]);
     formula.fClingParameters.push(param[11]);
     formula.fClingParameters.push(param[12]);
