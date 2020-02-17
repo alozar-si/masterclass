@@ -361,7 +361,40 @@ function loadDoc( url ) {
         alert(e);
       }
     }
-   
+      
+Blockly.Blocks['simple_analysis'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Belle II Masterclass");
+    this.appendDummyInput()
+        .appendField("Number of events: ")
+        .appendField(new Blockly.FieldNumber(5000, 0), "neve");
+    this.appendDummyInput()
+        .appendField("First event: ")
+        .appendField(new Blockly.FieldNumber(0, 0), "first");
+    this.appendDummyInput()
+        .appendField("Data Source")
+        .appendField(new Blockly.FieldDropdown([
+<?php
+$files = array_slice(scandir('../data/'), 2);
+$cnt=0;
+foreach($files as $f){
+  echo "[\"$f\",\"$f\"],";
+  $cnt++;
+}
+?>]), "datasource");
+    this.appendDummyInput()
+        .appendField("Print particle list?")
+        .appendField(new Blockly.FieldDropdown([["No", "0"], ["Yes", "1"]]), "print");
+    this.appendValueInput("list")
+        .setCheck("particle list")
+        .appendField("Particle List");
+    this.setColour(230);
+    this.setTooltip('Run the analysis, specify data source, number of events, first event and a list of particles to process.');
+    this.setHelpUrl('http://belle2.jp/');
+  }
+};
+
 
   </script>
 	  	  

@@ -286,7 +286,7 @@ $nodelist = $fstart->getElementsByTagName('h1d');
 $init = PHP_EOL . "void Blab2::Init(){" . PHP_EOL ;
 $init .="fNeve=$neve;" . PHP_EOL ;
 $init .="fNfirst=$first;" . PHP_EOL ;
-$init .="fData=$source;" . PHP_EOL ;
+$init .='fData="' . $source . '";' . PHP_EOL ;
 $init .="fPrint=$evprint;" . PHP_EOL ;
 foreach ($nodelist as $node) {
     $init .= $node->nodeName . "(";

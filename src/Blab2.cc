@@ -40,7 +40,7 @@ const char *names[12]={"photon", "electron", "pion", "muon", "kaon", "proton", "
 UInt_t fNeve;
 UInt_t fNfirst;
 UInt_t fPrint;
-int fData;
+TString fData;
 TH1F *fH[100];
 UInt_t fHtype[100];
 TClonesArray *fList[100];
@@ -67,7 +67,7 @@ ClassDef ( Blab2, 1 )
 
 ClassImp(Blab2)
 
-Blab2::Blab2():fNfirst(0), fNeve(0), fData(0), fPrint(0) { 
+Blab2::Blab2():fNfirst(0), fNeve(0), fData(), fPrint(0) { 
 
  Process(); 
 };
@@ -269,8 +269,8 @@ for (int i=0;i<100;i++) fList[i]=NULL;
 
 Init();
 
-TFile * f = new TFile(TString::Format("../../data/hadron-%d.root",fData)); // Open a data file
-if(f->IsZombie()) {  send_message(0,TString::Format("File %d not found\n",fData), 0 );  return; }  
+TFile * f = new TFile(TString::Format("../../data/%s",fData.Data())); // Open a data file
+if(f->IsZombie()) {  send_message(0,TString::Format("File %s not found\n",fData.Data()), 0 );  return; }  
 TTree * t =(TTree *) f-> Get( "T"); // Obtain a pointer to a tree of "event" data in the file
 BEvent * mevent = new BEvent(); // Create a  "BEvent" object where data from the file will be loaded
 TBranch * branch = t-> GetBranch( "BEvent"); // Obtain a branch for "BEvent" in the tree
