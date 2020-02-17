@@ -101,6 +101,8 @@ function initSliders(sframe){
       slide: function( event, ui ) {
         $( "#polOrderDisplay" + sframe ).val(ui.value);
         updatePolParamList(ui.value, sframe);
+        var fName = genFunctionName(sframe);
+        showFormula(fName, sframe);
         calculate(sframe);
       }
     });
@@ -438,7 +440,7 @@ function genFunList(sframe){
     }
   }
 
-  fName = genFunctionName(sframe);
+  var fName = genFunctionName(sframe);
   showFormula(fName, sframe);
   if((funMatrix[k][0]+funMatrix[k][1]+funMatrix[k][2]+funMatrix[k][3]) == 0){ alert("These are implemented functions:\n" + implementedFun.toString()) } //
 }
