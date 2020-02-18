@@ -489,7 +489,7 @@ function genFunctionName(sframe){
     if((Npar > 0)){
       fName += " + ";
     }
-    fName += "N_{BW} \\cdot  \\frac{1}{2 \\pi} \\frac{\\Gamma}{(x - M_{BW})^2 + (\\Gamma/2)^2)} "; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    fName += "N_{BW} \\cdot  \\frac{1}{2 \\pi} \\frac{\\Gamma}{(x - M_{BW})^2 + (\\Gamma/2)^2} "; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
    
     Npar += 3;
   }
