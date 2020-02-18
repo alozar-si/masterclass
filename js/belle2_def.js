@@ -34,7 +34,7 @@ Blockly.Blocks['particle_combiner'] = {
     this.setOutput(true, "particle list");
     this.setColour(120);
     this.setTooltip('Combine two particles in the new particle by making combinations between particles in two input lists. If the input connector is empty, the full particle list will be used');
-    this.setHelpUrl('http://belle.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -79,7 +79,7 @@ Blockly.Blocks['particle_combiner3'] = {
     this.setOutput(true, "particle list");
     this.setColour(0);
     this.setTooltip('Combine three particles in the new particle by making combinations between particles in three input lists. If the input connector is empty, the full particle list will be used');
-    this.setHelpUrl('http://belle.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -107,7 +107,7 @@ Blockly.Blocks['particle_selector'] = {
     this.setOutput(true, "particle list");
     this.setColour(65);
     this.setTooltip('Create a new list of particles based on the input particle list. If the input is empty, all the particles in the event are used.');
-    this.setHelpUrl('http://belle.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -139,7 +139,7 @@ Blockly.Blocks['histogram_creator'] = {
     this.setNextStatement(true);
     this.setColour(20);
     this.setTooltip('This block handles the histogram creation and filling. Define a number of bins, minimum and maximum of the range and assign a variable to plot');
-    this.setHelpUrl('http://belle2.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -164,7 +164,7 @@ Blockly.Blocks['simple_analysis'] = {
         .appendField("Particle List");
     this.setColour(230);
     this.setTooltip('Run the analysis, specify data source, number of events, first event and a list of particles to process.');
-    this.setHelpUrl('http://belle2.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -178,7 +178,7 @@ Blockly.Blocks['particle_mass_fix'] = {
     this.setOutput(true, "particle list");
     this.setColour(150);
     this.setTooltip('');
-    this.setHelpUrl('http://belle2.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 
@@ -193,6 +193,6 @@ Blockly.Blocks['primary_list'] = {
     this.setOutput(true, "particle list");
     this.setColour(180);
     this.setTooltip('Create a list of primary particles, if not used, the primary particles are used in the empty particle list connectors');
-    this.setHelpUrl('http://belle2.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
