@@ -173,11 +173,11 @@ function CreateTF1Fit(param, sframe){
   }
 
   if(funList[3]){
-    var BWParameters = ["N_{BW}", "#Gamma", "Mean_{BW}"]
+    var BWParameters = ["N_{BW}", "#Gamma", "M_{BW}"]
     if((Npar > 0)){
       formula.fFormula += " + ";
     }
-    formula.fFormula += "[N_{BW}] * TMath::BreitWigner(x, [Mean_{BW}], [#Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
+    formula.fFormula += "[N_{BW}] * TMath::BreitWigner(x, [M_{BW}], [#Gamma])"; // * [Gamma] / ((x - [MeanBW])^2 + ([Gamma]/2)^2)
     formula.fClingParameters.push(param[10]);
     formula.fClingParameters.push(param[11]);
     formula.fClingParameters.push(param[12]);

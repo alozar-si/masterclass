@@ -54,6 +54,7 @@ cursor: pointer; /* Cursor on hover */
 
 .inputParametersTable{
   text-align: center;
+  margin-left: 20px;
   width: 700px;
 }
 
