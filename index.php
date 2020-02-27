@@ -379,7 +379,9 @@ Blockly.Blocks['simple_analysis'] = {
 $files = array_slice(scandir('../data/'), 2);
 $cnt=0;
 foreach($files as $f){
-  echo "[\"$f\",\"$f\"],";
+  if (substr($f, -5 )===".root"){
+    echo "[\"$f\",\"$f\"],";
+  }
   $cnt++;
 }
 ?>]), "datasource");
@@ -391,7 +393,7 @@ foreach($files as $f){
         .appendField("Particle List");
     this.setColour(230);
     this.setTooltip('Run the analysis, specify data source, number of events, first event and a list of particles to process.');
-    this.setHelpUrl('http://belle2.jp/');
+    this.setHelpUrl('https://belle2.ijs.si/public/help/');
   }
 };
 

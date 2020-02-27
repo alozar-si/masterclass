@@ -88,3 +88,11 @@ div[name="ParamSlider"]{
 .rangeSettings{
   padding-top: 10px;
 }
+
+.hideFix-Bond{
+  visibility: hidden;
+}
+
+.inputParamBox{
+  visibility: hidden;
+}

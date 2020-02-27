@@ -2,6 +2,11 @@ var funMatrix = [[0, 0, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
                 [0, 0, 0, 0]]
 
 function initSliders(sframe){
@@ -604,7 +609,7 @@ function insertHTML(sframe, callback){
 
 function generateHTMLcode(sframe){
 
-  mform = '<button type="button" onclick="calculate('+ "'" + sframe + "'"+')">Draw Function</button>';        
+  mform = '<button type="button" onclick="calculate('+ "'" + sframe + "'"+')" style="display:none" >Draw Function</button>';        
   mform += '<button type="button" onclick="autoFit('+ "'" + sframe + "'"+')">Click to fit</button>'; 
   mform += '<div class="rangeSettings">';
   mform += 'Range: min = <input type="text" size="2" value="-5" name="min" id="minRange'+sframe+'" disabled=true>';
@@ -649,8 +654,8 @@ function generateHTMLcode(sframe){
   mform += '              <tbody>'
   mform += '                <tr class="description">'
   mform += '                  <td>Name</td>'
-  mform += '                  <td>Fix</td>'
-  mform += '                  <td>Bond</td>'
+  mform += '                  <td class="hideFix-Bond">Fix</td>'
+  mform += '                  <td class="hideFix-Bond">Bond</td>'
   mform += '                  <td>Value</td>'
   mform += '                  <td>Min</td>'
   mform += '                  <td>Set</td>'
@@ -698,8 +703,8 @@ function generateHTMLcode(sframe){
   mform += '              <tbody>'
   mform += '                <tr class="description">'
   mform += '                  <td>Name</td>'
-  mform += '                  <td>Fix</td>'
-  mform += '                  <td>Bond</td>'
+  mform += '                  <td class="hideFix-Bond">Fix</td>'
+  mform += '                  <td class="hideFix-Bond">Bond</td>'
   mform += '                  <td>Value</td>'
   mform += '                  <td>Min</td>'
   mform += '                  <td>Set</td>'
@@ -768,8 +773,8 @@ function generateHTMLcode(sframe){
   mform += '              <tbody>'
   mform += '                <tr class="description">'
   mform += '                  <td>Name</td>'
-  mform += '                  <td>Fix</td>'
-  mform += '                  <td>Bond</td>'
+  mform += '                  <td class="hideFix-Bond">Fix</td>'
+  mform += '                  <td class="hideFix-Bond">Bond</td>'
   mform += '                  <td>Value</td>'
   mform += '                  <td>Min</td>'
   mform += '                  <td>Set</td>'
@@ -815,8 +820,8 @@ function generateHTMLcode(sframe){
   mform += '              <tbody>'
   mform += '                <tr class="description">'
   mform += '                  <td>Name</td>'
-  mform += '                  <td>Fix</td>'
-  mform += '                  <td>Bond</td>'
+  mform += '                  <td class="hideFix-Bond">Fix</td>'
+  mform += '                  <td class="hideFix-Bond">Bond</td>'
   mform += '                  <td>Value</td>'
   mform += '                  <td>Min</td>'
   mform += '                  <td>Set</td>'
